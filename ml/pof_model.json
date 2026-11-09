@@ -1,0 +1,79 @@
+{
+ "metrics": {
+  "n_total": 12330,
+  "n_train": 9864,
+  "n_test": 2466,
+  "pos_rate": 0.1547,
+  "auc_lr": 0.889,
+  "auc_gbm": 0.903,
+  "ap_lr": 0.657,
+  "brier_lr": 0.0802,
+  "brier_base": 0.1309,
+  "auc_sdk_only": 0.718,
+  "top10_precision": 0.699,
+  "calib": [
+   [
+    0.015,
+    0.014
+   ],
+   [
+    0.036,
+    0.026
+   ],
+   [
+    0.05,
+    0.049
+   ],
+   [
+    0.087,
+    0.116
+   ],
+   [
+    0.578,
+    0.57
+   ]
+  ]
+ },
+ "model": {
+  "cols": [
+   "admin_n",
+   "admin_s",
+   "info_n",
+   "info_s",
+   "prod_n",
+   "prod_s",
+   "new_visitor",
+   "weekend",
+   "bounce",
+   "exit",
+   "pagevalue"
+  ],
+  "w": [
+   -0.1498,
+   -0.01746,
+   0.35021,
+   -0.07025,
+   0.26785,
+   -0.02059,
+   0.78399,
+   0.20783,
+   -8.28823,
+   -5.66573,
+   1.08966
+  ],
+  "b": -3.45854,
+  "std_coef": {
+   "admin_n": -0.129,
+   "admin_s": -0.041,
+   "info_n": 0.173,
+   "info_s": -0.127,
+   "prod_n": 0.3,
+   "prod_s": -0.042,
+   "new_visitor": 0.269,
+   "weekend": 0.087,
+   "bounce": -0.4,
+   "exit": -0.274,
+   "pagevalue": 1.387
+  }
+ }
+}

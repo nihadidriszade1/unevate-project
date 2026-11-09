@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proof of Future canlı demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: solda telefon (müştərinin gördüyü marketplace), sağda sistemin beyni (münsifin gördüyü) */
+  --bg:#10141b; --panel:#181e27; --line:#2a3240; --ink:#e9edf3; --muted:#8f99aa;
+  --accent:#ffb02e;
+  --c-coral:#ff5f6d; --c-sky:#2f8cff; --c-violet:#7b5cff; --c-sun:#ffb02e; --c-mint:#1fc8a0;
+  --shop:#4b3df5; --shop-2:#ff5f6d; --shop-ink:#191d26; --shop-muted:#6a7280; --shop-bg:#ffffff; --shop-soft:#f3f4f8; --shop-line:#e6e8ef;
+  --f-body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --f-shop:"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--f-body)}
+button{font:inherit;color:inherit;cursor:pointer}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.top{position:relative;display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--line)}
+.top::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--c-coral),var(--c-sun),var(--c-mint),var(--c-sky),var(--c-violet))}
+.top h1{margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em;text-wrap:balance}
+.top h1 span{color:var(--muted);font-weight:400}
+.top p{margin:2px 0 0;color:var(--muted);font-size:13.5px;max-width:62ch}
+.top-right{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;justify-content:flex-end}
+.langs{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.langs button{border:0;background:transparent;border-radius:999px;padding:5px 12px;font:600 12.5px var(--f-mono);color:var(--muted);letter-spacing:.04em}
+.langs button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.ops{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ops-label{font:500 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-right:2px}
+.op{background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--ink)}
+.op:hover{border-color:var(--accent);color:var(--accent)}
+.op.reset{border-style:dashed;color:var(--muted)}
+
+.stage{display:grid;grid-template-columns:400px minmax(0,1fr);gap:28px;padding:24px;max-width:1300px;margin:0 auto}
+@media (max-width:980px){.stage{grid-template-columns:1fr}}
+
+/* ---------- phone / marketplace ---------- */
+.phone-col{display:flex;flex-direction:column;align-items:center;gap:16px}
+.phone{position:relative;width:370px;max-width:100%;height:760px;border-radius:44px;border:10px solid #05070a;background:var(--shop-bg);overflow:hidden;box-shadow:0 0 0 1px #2c3443,0 30px 70px rgba(0,0,0,.5);color:var(--shop-ink);font-family:var(--f-shop)}
+.status{position:absolute;top:0;left:0;right:0;height:30px;z-index:6;display:flex;justify-content:space-between;align-items:center;padding:0 22px;font:700 12.5px var(--f-shop);color:var(--shop-ink);background:var(--shop-bg)}
+.status svg{height:11px}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:110px;height:24px;background:#05070a;border-radius:0 0 14px 14px;z-index:7}
+.app{position:absolute;top:30px;left:0;right:0;bottom:0;overflow-y:auto;scrollbar-width:none}
+.app::-webkit-scrollbar{display:none}
+.app.tabs{bottom:62px}
+.tabbar{position:absolute;left:0;right:0;bottom:0;height:62px;z-index:4;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--shop-line);background:#fff;padding-bottom:6px}
+.tabbar button{border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:10.5px;font-weight:600;color:var(--shop-muted)}
+.tabbar button.on{color:var(--shop)}
+.tabbar svg{width:22px;height:22px}
+.tabbar b{position:absolute;margin:-24px 0 0 22px;min-width:16px;height:16px;border-radius:8px;background:var(--shop-2);color:#fff;font-size:10px;line-height:16px;text-align:center;padding:0 4px}
+
+.shop-top{position:sticky;top:0;z-index:3;display:flex;flex-direction:column;gap:10px;padding:8px 14px 12px;background:#fff;border-bottom:1px solid var(--shop-line)}
+.shop-row{display:flex;align-items:center;gap:8px}
+.logo{font:800 22px var(--f-shop);letter-spacing:-.04em;flex:1;display:flex;align-items:center;gap:6px}
+.logo i{font-style:normal;background:linear-gradient(90deg,var(--shop),var(--shop-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo .tag{width:22px;height:22px;border-radius:7px;background:conic-gradient(from 200deg,var(--c-coral),var(--c-sun),var(--c-mint),var(--c-sky),var(--c-violet),var(--c-coral));display:inline-block}
+.icon-btn{border:0;background:var(--shop-soft);width:34px;height:34px;border-radius:11px;font-size:20px;line-height:1;color:var(--shop-ink);display:grid;place-items:center}
+.cartbtn{position:relative}
+.cartbtn svg{width:20px;height:20px}
+.cnt{position:absolute;top:-4px;right:-4px;min-width:17px;height:17px;border-radius:9px;background:var(--shop-2);color:#fff;font:700 10.5px/17px var(--f-shop);padding:0 4px;text-align:center}
+.searchbar{display:flex;align-items:center;gap:8px;border:2px solid var(--shop-ink);border-radius:999px;padding:4px 4px 4px 14px}
+.searchbar span{flex:1;color:var(--shop-muted);font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.searchbar b{background:var(--shop);color:#fff;border-radius:999px;padding:6px 14px;font-size:13px}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:12px 14px 4px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:none;display:flex;flex-direction:column;align-items:center;gap:5px;width:62px;font-size:11px;font-weight:600;text-align:center;color:var(--shop-ink)}
+.cat i{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--cc);color:#fff}
+.cat i svg{width:24px;height:24px}
+.promo{margin:12px 14px 0;border-radius:18px;padding:16px;background:linear-gradient(115deg,#4b3df5 0%,#8a3df5 55%,#ff5f6d 100%);color:#fff;display:flex;flex-direction:column;gap:3px;position:relative;overflow:hidden}
+.promo::after{content:"";position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.14)}
+.promo b{font-size:18px;font-weight:800;letter-spacing:-.02em}
+.promo span{font-size:13px;opacity:.92;max-width:24ch}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;margin:18px 14px 10px;font-size:16px;font-weight:800;letter-spacing:-.02em}
+.sec-h small{font-size:12px;font-weight:600;color:var(--shop)}
+.deals{display:flex;gap:10px;overflow-x:auto;padding:0 14px 4px;scrollbar-width:none}
+.deals::-webkit-scrollbar{display:none}
+.deal{flex:none;width:140px;border:0;background:none;padding:0;text-align:left;display:flex;flex-direction:column;gap:3px;color:var(--shop-ink)}
+.ph{position:relative;border-radius:14px;overflow:hidden;background:var(--shop-soft);aspect-ratio:1/1}
+.ph img{width:100%;height:100%;object-fit:cover}
+.off{position:absolute;left:8px;top:8px;background:var(--shop-2);color:#fff;font-size:11.5px;font-weight:800;padding:3px 8px;border-radius:999px}
+.auc{position:absolute;left:8px;top:8px;background:var(--c-sun);color:#3a2600;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px}
+.heart{position:absolute;right:8px;top:8px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;color:var(--shop-ink)}
+.heart svg{width:16px;height:16px}
+.heart.on{color:var(--shop-2)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 10px;padding:0 14px 18px}
+.card{border:0;background:none;padding:0;text-align:left;display:flex;flex-direction:column;gap:3px;color:var(--shop-ink)}
+.c-name{font-size:13px;font-weight:600;line-height:1.3;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.c-cond{font-size:11.5px;color:var(--shop-muted)}
+.c-price{font-size:16px;font-weight:800;letter-spacing:-.02em}
+.c-price s{font-size:12px;font-weight:500;color:var(--shop-muted);margin-left:5px}
+.c-ship{font-size:11.5px;font-weight:700;color:#0d9b78}
+.c-meta{font-size:11.5px;color:var(--shop-muted)}
+.c-bid{font-size:11.5px;font-weight:700;color:#a86a00}
+
+.p-hero{position:relative;margin:12px 14px 0;border-radius:20px;overflow:hidden;background:var(--shop-soft);aspect-ratio:1/1}
+.p-hero img{width:100%;height:100%;object-fit:cover}
+.dots{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:5px}
+.dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.6)}
+.dots i:first-child{background:#fff;width:16px;border-radius:3px}
+.p-body{padding:14px 14px 110px;display:flex;flex-direction:column;gap:11px}
+.p-body h2{margin:0;font-size:19px;line-height:1.25;font-weight:800;letter-spacing:-.02em}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.pill2{font-size:11.5px;font-weight:700;padding:4px 9px;border-radius:999px;background:var(--shop-soft);color:var(--shop-ink)}
+.pill2.mint{background:#e2f8f2;color:#0b7a5f}
+.pill2.violet{background:#ecebff;color:#3b2fd0}
+.seller{display:flex;align-items:center;gap:10px;font-size:13px}
+.seller .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--c-sky),var(--c-violet));color:#fff;font-weight:800;display:grid;place-items:center;font-size:13px}
+.seller small{color:var(--shop-muted);display:block}
+.pricebox{border-radius:16px;padding:12px 14px;background:linear-gradient(135deg,#f5f3ff,#fff1f2);display:flex;flex-direction:column;gap:4px}
+.price-row{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.p-price{border:0;background:none;padding:0;font:800 27px var(--f-shop);letter-spacing:-.03em;color:var(--shop-ink)}
+.p-price-old{font-size:14px;color:var(--shop-muted);text-decoration:line-through}
+.p-hint{font-size:12.5px;color:var(--shop);font-weight:600;text-decoration:underline dotted}
+.bidline{font-size:13px;color:#8a5700;font-weight:700}
+.badge{display:inline-block;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;background:#e2f8f2;color:#0b7a5f}
+.hist{background:#fff;border-radius:12px;padding:8px 10px;font-size:12.5px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hist svg{width:120px;height:30px;flex:none}
+.sizes-head{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:700}
+.link{border:0;background:none;padding:0;color:var(--shop);font-size:13px;font-weight:700}
+.sizes{display:flex;gap:8px;flex-wrap:wrap}
+.chip{min-width:46px;border:1.5px solid var(--shop-line);background:#fff;border-radius:12px;padding:8px 10px;font-size:14px;font-weight:600;color:var(--shop-ink)}
+.chip.on{border-color:var(--shop);background:#ecebff;color:#3b2fd0}
+table.sz{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+table.sz th,table.sz td{border-bottom:1px solid var(--shop-line);padding:6px 4px;text-align:left}
+table.sz th{color:var(--shop-muted);font-weight:600}
+.row{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--shop-line);background:#fff;border-radius:14px;padding:11px 12px;text-align:left;font-size:14px;color:var(--shop-ink)}
+.row .ri{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none}
+.row .ri svg{width:17px;height:17px}
+.row span.l{flex:1;color:var(--shop-muted);font-weight:500}
+.row b{font-weight:700}
+.chev{color:var(--shop-muted);width:14px;text-align:center}
+.note{font-size:13px;color:var(--shop-muted);padding:0 4px}
+.rev{border-top:1px solid var(--shop-line);padding:8px 2px;font-size:13px}
+.rev b{display:block;font-size:12.5px}
+.rev .st{color:var(--c-sun);letter-spacing:1px}
+.p-cta{position:sticky;bottom:0;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 14px 14px;background:linear-gradient(rgba(255,255,255,0),#fff 28%)}
+.btn-primary{width:100%;border:0;border-radius:999px;padding:14px;background:var(--shop);color:#fff;font-weight:700;font-size:15px;font-family:var(--f-shop)}
+.btn-second{width:100%;border:2px solid var(--shop);border-radius:999px;padding:12px;background:#fff;color:var(--shop);font-weight:700;font-size:15px;font-family:var(--f-shop)}
+.btn-ghost{width:100%;border:0;border-radius:999px;padding:12px;background:transparent;color:var(--shop-muted);font-size:14px;font-family:var(--f-shop)}
+.pad{padding:14px}
+.h1{font-size:20px;font-weight:800;letter-spacing:-.02em;margin:2px 0 8px}
+.line{display:flex;gap:10px;align-items:center;border-bottom:1px solid var(--shop-line);padding:10px 0}
+.line img{width:58px;height:58px;border-radius:12px;object-fit:cover;flex:none}
+.line div{flex:1;font-size:13.5px;line-height:1.35;font-weight:600}
+.line small{color:var(--shop-muted);font-weight:500}
+.x{border:0;background:var(--shop-soft);border-radius:9px;width:30px;height:30px;color:var(--shop-muted);font-size:16px}
+.total{display:flex;justify-content:space-between;font-weight:800;font-size:17px;padding:14px 0;font-variant-numeric:tabular-nums}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--shop-line);font-size:14px}
+.kv span{color:var(--shop-muted)}
+.err{background:#ffeef0;color:#b4192b;border-radius:12px;padding:10px 12px;font-size:13.5px;font-weight:600}
+.done{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:56px 22px}
+.done .ok{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--c-mint),var(--c-sky));color:#fff;display:grid;place-items:center;font-size:34px;font-weight:800}
+.empty{color:var(--shop-muted);text-align:center;padding:40px 10px}
+.toast{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);background:var(--shop-ink);color:#fff;font-size:13px;font-weight:600;padding:9px 16px;border-radius:999px;z-index:8;white-space:nowrap}
+
+.scrim{position:absolute;inset:0;background:rgba(17,20,30,.42);z-index:9;display:flex;align-items:flex-end}
+.scrim[hidden]{display:none}
+.sheet-card{width:100%;background:#fff;border-radius:26px 26px 0 0;padding:10px 18px 22px;display:flex;flex-direction:column;gap:8px;transform:translateY(100%);transition:transform .24s ease-out;font-family:var(--f-shop)}
+.scrim.open .sheet-card{transform:none}
+.grab{width:40px;height:4px;border-radius:2px;background:var(--shop-line);margin:0 auto 6px}
+.sh-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;color:#fff}
+.sh-icon svg{width:24px;height:24px}
+.kicker{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.sheet-card h3{margin:0;font-size:19px;font-weight:800;letter-spacing:-.02em}
+.sheet-card p{margin:0 0 6px;font-size:14px;color:#414857}
+
+.hints{width:370px;max-width:100%;font-size:13px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.hints b{color:var(--ink);font-weight:600}
+.hints ol{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+
+/* ---------- brain ---------- */
+.brain{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-content:start}
+@media (max-width:640px){.brain{grid-template-columns:1fr}}
+.bcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+.bcard.wide{grid-column:1/-1}
+.bcard h2{margin:0 0 12px;font:500 11.5px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:flex;justify-content:space-between;gap:10px}
+.decision{display:flex;flex-direction:column;gap:8px}
+.pill{align-self:flex-start;font:600 12px var(--f-mono);padding:4px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.pill.act{border-color:transparent;color:#160f00;background:var(--accent)}
+.pill.skip{border-color:#4a5568;color:var(--ink)}
+.pill.watch::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--c-mint);margin-right:6px;vertical-align:1px}
+.d-main{font-size:19px;font-weight:600;line-height:1.35;text-wrap:balance}
+.d-sub{color:var(--muted);font-size:13.5px}
+.d-lat{font:500 13px var(--f-mono);color:var(--accent)}
+.meter{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.meter-top{display:flex;justify-content:space-between;font-size:13.5px}
+.meter-top b{font:500 14px var(--f-mono);font-variant-numeric:tabular-nums}
+.track{position:relative;height:10px;border-radius:5px;background:#232b37;overflow:hidden}
+.fill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--muted);transition:width .25s ease}
+.zone{position:absolute;top:0;bottom:0;left:5%;width:55%;background:rgba(255,176,46,.13);border-left:1px dashed rgba(255,176,46,.55);border-right:1px dashed rgba(255,176,46,.55)}
+.dot{position:absolute;top:-2px;width:4px;height:14px;border-radius:2px;background:var(--ink);transition:left .25s ease}
+.legend{font-size:12px;color:var(--muted)}
+.cause{display:grid;grid-template-columns:150px minmax(0,1fr) 44px;gap:10px;align-items:center;font-size:13.5px;padding:5px 0}
+.cause .track{height:8px}
+.cause .fill{background:var(--cc);opacity:.45}
+.cause b{font:500 13px var(--f-mono);text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.cause .nm::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;background:var(--cc);margin-right:7px}
+.cause.hot{font-weight:600}
+.cause.hot .fill{opacity:1}
+.cause.hot b{color:var(--ink)}
+.thr{position:absolute;top:0;bottom:0;left:62%;width:1px;background:rgba(233,237,243,.4)}
+.stream{list-style:none;margin:0;padding:0;font:13px/1.45 var(--f-mono);display:flex;flex-direction:column;gap:2px;max-height:300px;overflow-y:auto}
+.stream li{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;padding:4px 0;border-bottom:1px solid #222936}
+.stream .t{color:var(--muted);font-variant-numeric:tabular-nums}
+.stream .d{color:var(--muted)}
+.stream li.dec span:nth-child(2){color:var(--accent)}
+.stream li.ext span:nth-child(2){color:#8fc3ff}
+.stream li.fresh{animation:flash .6s ease-out}
+@keyframes flash{from{background:rgba(255,176,46,.18)}to{background:transparent}}
+pre.payload{margin:0;font:12.5px/1.5 var(--f-mono);white-space:pre-wrap;word-break:break-all;color:#bff0dc;background:#12171e;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.kept{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kept b{display:block;font:500 22px var(--f-mono);font-variant-numeric:tabular-nums}
+.kept span{font-size:12.5px;color:var(--muted)}
+.kept.out b{color:var(--c-mint)}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media (max-width:640px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.stat b{display:block;font:500 22px var(--f-mono);font-variant-numeric:tabular-nums}
+.stat span{font-size:12.5px;color:var(--muted)}
+.seg{display:flex;border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;border-radius:9px;padding:7px 6px;font-size:13px;font-weight:500;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:#2a3342;color:var(--ink)}
+.d-why{font-size:14px;line-height:1.45;color:var(--ink)}
+.mech{align-self:flex-start;font:500 12px var(--f-mono);padding:3px 10px;border-radius:999px;border:1px solid var(--cc);color:var(--cc)}
+.halfh{margin-top:14px;font:500 11px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.half{list-style:none;margin:6px 0 0;padding:0;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.half li::before{content:"";display:inline-block;width:18px;height:2px;margin-right:8px;vertical-align:middle;background:var(--line)}
+.stream li.sil span:nth-child(2){color:#c9b6ff}
+/* ---------- modes ---------- */
+.pitch-only{display:none!important}
+body.pitch .detail-only{display:none!important}
+body.pitch .pitch-only{display:flex!important}
+body.pitch .top{padding:10px 20px;flex-wrap:nowrap;gap:12px}
+body.pitch .top h1{font-size:18px;white-space:nowrap}
+body.pitch .top h1 span{display:none}
+body.pitch .top-right{flex-wrap:nowrap;gap:8px}
+body.pitch .scen .ops-label{display:none}
+body.pitch .scen{flex-wrap:nowrap;gap:4px}
+body.pitch .scen button{padding:4px 10px 4px 4px;white-space:nowrap}
+body.pitch .ops-label{display:none}
+body.pitch .modes button,body.pitch .langs button{padding:5px 9px}
+body.pitch .op{padding:5px 10px;white-space:nowrap}
+body.pitch .stage{padding:16px 24px;gap:28px;align-items:start}
+body.pitch .foot{display:none}
+.modes{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.modes button{border:0;background:transparent;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:500;color:var(--muted)}
+.modes button[aria-pressed="true"]{background:var(--accent);color:#160f00;font-weight:600}
+.scen{align-items:center;gap:6px;flex-wrap:wrap}
+.scen button{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:transparent;border-radius:999px;padding:5px 12px 5px 5px;font-size:13px;color:var(--ink)}
+.scen button b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#262e3b;font:600 12px var(--f-mono)}
+.scen button[aria-pressed="true"]{border-color:var(--accent)}
+.scen button[aria-pressed="true"] b{background:var(--accent);color:#160f00}
+.phone{height:min(860px, calc(100vh - 150px));min-height:560px}
+@media (max-height:860px){.keys .kh{display:none}}
+.keys{width:370px;max-width:100%;flex-direction:column;gap:6px;align-items:center;text-align:center}
+.keys .tip{font-size:17px;font-weight:600;color:var(--ink);text-wrap:balance}
+.keys .tip:empty{display:none}
+.keys .kh{font:12px var(--f-mono);color:var(--muted)}
+/* ---------- pitch panel ---------- */
+.pp{flex-direction:column;gap:16px;min-width:0}
+.pp-label{font:500 12px var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.pp-sees{display:flex;flex-direction:column;gap:8px}
+.pp-chips{display:flex;gap:8px;flex-wrap:nowrap;overflow:hidden;min-height:40px;align-items:center}
+.pp-chip{flex:none;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:14px;color:var(--muted);white-space:nowrap}
+.pp-chip:first-child{font-size:17px;font-weight:600;color:var(--ink);border-color:var(--cc,var(--line));background:color-mix(in srgb,var(--cc,#2a3240) 18%,transparent)}
+.pp-chip.dec{border-style:dashed}
+.pp-hero{--cc:#1fc8a0;position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:center;background:var(--panel);border:1px solid var(--line);border-left:6px solid var(--cc);border-radius:20px;padding:26px 28px;min-height:250px}
+.pp-hero.pulse{animation:pulse 1.1s ease-out}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--cc) 70%,transparent)}100%{box-shadow:0 0 0 14px transparent}}
+.pp-main{display:flex;flex-direction:column;gap:12px;min-width:0}
+.pp-main .big{font-size:34px;font-weight:600;line-height:1.18;letter-spacing:-.015em;text-wrap:balance}
+.pp-main .why{font-size:19px;line-height:1.4;color:var(--ink)}
+.pp-main .sub{font-size:16px;color:var(--muted);line-height:1.45}
+.pp-main .ppo{font:500 14px var(--f-mono);color:var(--muted)}
+.pp-main .pill{font-size:13px}
+.pp-main .mech{font-size:13px}
+.pp-lat{display:flex;flex-direction:column;align-items:flex-end;text-align:right;min-width:150px}
+.pp-lat b{font:600 76px/1 var(--f-mono);color:var(--accent);letter-spacing:-.04em}
+.pp-lat span{font:500 20px var(--f-mono);color:var(--accent);margin-top:-4px}
+.pp-lat small{font-size:13px;color:var(--muted);margin-top:6px}
+.pp-lat small.nc{color:var(--c-mint);font-weight:600}
+.pp-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pp-kpi{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.pp-kpi span{font-size:14px;color:var(--muted)}
+.pp-kpi b{font:600 36px/1.05 var(--f-mono);font-variant-numeric:tabular-nums}
+.pp-kpi small{font-size:13px;color:var(--muted)}
+.pp-foot{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:14px}
+.pp-prof{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.pp-causes{display:flex;flex-direction:column}
+.pp-note{font-size:13px;color:var(--muted)}
+.pp-causes .cause{grid-template-columns:minmax(0,1fr) 84px 38px;padding:1px 0;font-size:13px}
+@media (max-width:1180px){.pp-foot{grid-template-columns:1fr}.pp-main .big{font-size:28px}.pp-lat b{font-size:60px}}
+@media (max-width:980px){.pp-kpis{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.pp-hero.pulse{animation:none}}
+/* sıx pitch: proyektor 1366×768 */
+body.pitch .pp{gap:11px}
+body.pitch .pp-hero{padding:18px 22px;min-height:0;gap:18px}
+body.pitch .pp-main{gap:8px}
+body.pitch .pp-main .big{font-size:30px}
+body.pitch .pp-main .why{font-size:17px}
+body.pitch .pp-lat b{font-size:68px}
+body.pitch .pp-kpi{padding:11px 14px;gap:3px}
+body.pitch .pp-kpi b{font-size:31px}
+body.pitch .pp-kpi small{font-size:12px;line-height:1.3}
+body.pitch .pp-prof{padding:10px 14px;gap:5px}
+body.pitch .pp-prof .seg button{padding:5px 6px}
+body.pitch .pp-causes .cause{padding:1px 0;font-size:13px}
+body.pitch .pp-chips{min-height:34px}
+body.pitch .pp-chip{padding:4px 12px}
+body.pitch .pp-chip:first-child{font-size:15.5px}
+@media (max-height:800px){body.pitch .pp-note{display:none}}
+.apps button[aria-pressed="true"]{background:var(--c-sky);color:#fff}
+.roi-btn{border-color:var(--c-mint);color:var(--c-mint)}
+.pp-sees-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.ml-badge{font:500 12.5px var(--f-mono);color:#bfe9ff;border:1px solid #2b5c7a;background:rgba(47,140,255,.12);border-radius:999px;padding:4px 12px;white-space:nowrap}
+.pp-main .econ{font:500 14px var(--f-mono);color:#bff0dc}
+.mlc{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 24px;font-size:13.5px}
+.mlc li b{font-family:var(--f-mono);font-weight:500;color:var(--ink)}
+.mlc li.full{grid-column:1/-1;color:var(--muted)}
+.roi{position:fixed;inset:0;z-index:50;background:rgba(8,10,14,.72);display:grid;place-items:center;padding:24px}
+.roi[hidden]{display:none}
+.roi-box{width:min(1080px,100%);max-height:100%;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px 24px}
+.roi-head{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:14px}
+.roi-head h2{margin:0;font-size:22px;font-weight:600;text-wrap:balance}
+.roi-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:24px}
+@media (max-width:860px){.roi-grid{grid-template-columns:1fr}}
+.roi-in{display:flex;flex-direction:column;gap:10px}
+.roi-in label{display:grid;grid-template-columns:minmax(0,1fr) 84px;gap:2px 10px;font-size:13.5px;color:var(--muted);align-items:center}
+.roi-in label b{font:500 14px var(--f-mono);color:var(--ink);text-align:right}
+.roi-in input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--c-mint)}
+.roi-t{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums}
+.roi-t th,.roi-t td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right}
+.roi-t th:first-child,.roi-t td:first-child{text-align:left;color:var(--muted)}
+.roi-t thead th{font:500 12px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.roi-t thead th.pof{color:var(--c-mint)}
+.roi-t tr.net td{font-weight:600;font-size:16px;color:var(--ink);border-bottom:0}
+.roi-t tr.net td.pos{color:var(--c-mint)} .roi-t tr.net td.neg{color:var(--c-coral)}
+.roi-bars{display:flex;flex-direction:column;gap:8px;margin:14px 0 8px}
+.rb{display:grid;grid-template-columns:140px minmax(0,1fr) 90px;gap:10px;align-items:center;font-size:13.5px}
+.rb .bar{height:14px;border-radius:7px;background:#232b37;position:relative;overflow:hidden}
+.rb .bar i{position:absolute;top:0;bottom:0;left:0;border-radius:7px}
+.rb b{font:500 14px var(--f-mono);text-align:right}
+.roi-be{font-size:15px;color:var(--ink);margin:8px 0}
+.roi-be b{color:var(--c-mint);font-family:var(--f-mono)}
+.roi-note{font-size:12.5px;color:var(--muted);margin:6px 0 0}
+/* station screens */
+.st-hero{position:relative;margin:12px 14px 0;border-radius:20px;overflow:hidden;aspect-ratio:16/10;background:#123}
+.st-hero img{width:100%;height:100%;object-fit:cover;filter:saturate(1.1)}
+.st-hero .ov{position:absolute;inset:auto 0 0 0;padding:14px;background:linear-gradient(transparent,rgba(5,10,20,.85));color:#fff}
+.st-hero .ov b{display:block;font-size:18px;font-weight:800}
+.st-hero .ov span{font-size:12.5px;opacity:.9}
+.fuels{display:flex;gap:6px;flex-wrap:wrap;margin:12px 14px 0}
+.fnote{margin:6px 14px 0;font-size:11.5px;color:var(--shop-muted)}
+.svc{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
+.svc button{border:0;border-radius:16px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:4px;color:#fff;font-family:var(--f-shop);min-height:104px;justify-content:flex-end}
+.svc button svg{width:24px;height:24px;margin-bottom:auto}
+.svc button b{font-size:15px;font-weight:800}
+.svc button span{font-size:12px;opacity:.92}
+.slots{display:flex;gap:8px;flex-wrap:wrap}
+.evrow{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--shop-line);border-radius:14px;padding:12px;font-size:14px}
+.evrow small{color:var(--shop-muted)}
+.evbar{height:10px;border-radius:5px;background:var(--shop-soft);overflow:hidden}
+.evbar i{display:block;height:100%;background:linear-gradient(90deg,var(--c-mint),var(--c-sky));border-radius:5px;transition:width .4s}
+.evbar.down i{background:var(--shop-2)}
+.mk{display:flex;gap:12px;align-items:center;border-bottom:1px solid var(--shop-line);padding:10px 0}
+.mk img{width:64px;height:64px;border-radius:14px;object-fit:cover;flex:none}
+.mk div{flex:1;font-size:14px;font-weight:600;line-height:1.3}
+.mk .pr{border:0;background:none;padding:0;font:800 16px var(--f-shop);color:var(--shop-ink);text-align:right}
+.mk .pr s{display:block;font-size:11.5px;font-weight:500;color:var(--shop-muted)}
+@media (max-width:1180px){.pp-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.src-btn{border-color:#2b5c7a;color:#8fc3ff}
+.badges{display:flex;gap:8px}
+.ml-badge.priv{color:#bff0dc;border-color:#1f6b55;background:rgba(31,200,160,.1)}
+.pp-money{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px 14px;display:flex;flex-direction:column;gap:6px}
+.mt{width:100%;border-collapse:collapse;font-size:13.5px}
+.mt td{padding:3px 0;vertical-align:top}
+.mt td:first-child{color:var(--muted);padding-right:12px;white-space:nowrap}
+.mt td:last-child{text-align:right;font-family:var(--f-mono);font-size:13px}
+.mt tr.net td{border-top:1px solid var(--line);padding-top:6px;font-weight:600;font-size:15px}
+.mt .pos{color:var(--c-mint)} .mt .neg{color:var(--c-coral)}
+.mt .empty{color:var(--muted);font-family:var(--f-body);text-align:left!important}
+.src-lead{font-size:14px;color:var(--muted);margin:0 0 12px;max-width:80ch}
+.src-t{width:100%;border-collapse:collapse;font-size:13.5px}
+.src-t th,.src-t td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.src-t thead th{font:500 12px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.src-t td:nth-child(2){font-family:var(--f-mono);white-space:nowrap;color:var(--ink)}
+.src-t td:nth-child(3){color:var(--muted)}
+.src-t a{color:#8fc3ff}
+.st{display:inline-block;font:600 11.5px var(--f-mono);padding:3px 9px;border-radius:999px;white-space:nowrap}
+.st.data{background:rgba(31,200,160,.15);color:#7fe8c9}
+.st.std{background:rgba(47,140,255,.15);color:#9ecbff}
+.st.lit{background:rgba(123,92,255,.18);color:#c9b6ff}
+.st.hyp{background:rgba(255,176,46,.16);color:#ffd08a}
+.mem-note{font-size:12px;color:var(--muted);margin:-6px 0 10px}
+.ev{border:1px solid #1f6b55;background:rgba(31,200,160,.06);border-radius:16px;padding:16px 18px;margin:0 0 16px;display:flex;flex-direction:column;gap:12px}
+.ev h3{margin:0;font-size:18px;font-weight:600;text-wrap:balance}
+.ev .lead{margin:0;font-size:13.5px;color:var(--muted);max-width:90ch}
+.ev-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:22px}
+@media (max-width:860px){.ev-grid{grid-template-columns:1fr}}
+.ev-sub{font:500 11.5px var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
+.evb{display:grid;grid-template-columns:170px minmax(0,1fr) 64px;gap:10px;align-items:center;font-size:13px;padding:4px 0}
+.evb .ax{position:relative;height:16px}
+.evb .ax .z{position:absolute;top:-3px;bottom:-3px;width:1px;background:var(--muted)}
+.evb .ax .bar{position:absolute;top:2px;height:12px;border-radius:3px;background:#5d6676}
+.evb.hl .ax .bar{background:var(--c-mint)}
+.evb .ax .ci{position:absolute;top:7px;height:2px;background:var(--ink);opacity:.8}
+.evb .ax .ci::before,.evb .ax .ci::after{content:"";position:absolute;top:-4px;width:2px;height:10px;background:var(--ink)}
+.evb .ax .ci::before{left:0} .evb .ax .ci::after{right:0}
+.evb b{font:500 13.5px var(--f-mono);text-align:right}
+.evb.hl b{color:var(--c-mint)}
+.evb small{display:block;color:var(--muted);font-size:11.5px}
+.ev-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}
+.ev-stats div{border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.ev-stats b{display:block;font:600 20px var(--f-mono);color:var(--ink)}
+.ev-stats span{font-size:11.5px;color:var(--muted)}
+.ev .meth{font-size:12px;color:var(--muted);margin:0}
+.st.exp{background:rgba(31,200,160,.22);color:#7fe8c9}
+.roi-ev{font-size:13.5px;color:#bff0dc;margin:4px 0 0}
+.foot{max-width:1300px;margin:0 auto;padding:0 24px 32px;color:var(--muted);font-size:13px;display:flex;flex-direction:column;gap:6px}
+.foot p{max-width:92ch;margin:0}
+.foot a{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>Proof of Future <span data-i="sub">· canlı demo</span></h1>
+    <p class="detail-only" data-i="lead"></p>
+  </div>
+  <div class="top-right">
+    <div class="scen pitch-only" role="group">
+      <span class="ops-label" data-i="scenL"></span>
+      <button type="button" data-scen="1"><b>1</b><span id="sc-l1"></span></button>
+      <button type="button" data-scen="2"><b>2</b><span id="sc-l2"></span></button>
+      <button type="button" data-scen="3"><b>3</b><span id="sc-l3"></span></button>
+      <button type="button" data-scen="4"><b>4</b><span id="sc-l4"></span></button>
+    </div>
+    <button type="button" class="op roi-btn" id="roi-open" data-i="roiBtn"></button>
+    <button type="button" class="op src-btn" id="src-open" data-i="srcBtn"></button>
+    <div class="modes" role="group">
+      <button type="button" data-mode="pitch" data-i="mPitch"></button>
+      <button type="button" data-mode="detail" data-i="mDetail"></button>
+    </div>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" data-lang="az">AZ</button>
+      <button type="button" data-lang="tr">TR</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+    <div class="ops">
+      <span class="ops-label detail-only" data-i="ops"></span>
+      <button class="op detail-only" id="off-delay" type="button" data-i="opDelay"></button>
+      <button class="op detail-only" id="off-return" type="button" data-i="opReturn"></button>
+      <button class="op detail-only" id="off-comp" type="button" data-i="opComp"></button>
+      <button class="op reset" id="reset" type="button" data-i="reset"></button>
+    </div>
+  </div>
+</header>
+
+<main class="stage">
+  <section class="phone-col">
+    <div class="phone" id="phone">
+      <div class="status"><span>9:41</span><svg viewBox="0 0 54 11" aria-hidden="true"><rect x="0" y="7" width="3" height="4" rx="1" fill="currentColor"/><rect x="5" y="5" width="3" height="6" rx="1" fill="currentColor"/><rect x="10" y="3" width="3" height="8" rx="1" fill="currentColor"/><rect x="15" y="1" width="3" height="10" rx="1" fill="currentColor"/><rect x="28" y=".5" width="22" height="10" rx="3" fill="none" stroke="currentColor"/><rect x="30" y="2.5" width="15" height="6" rx="1.5" fill="currentColor"/><rect x="51" y="3.5" width="2" height="4" rx="1" fill="currentColor"/></svg></div>
+      <div class="notch"></div>
+      <div class="app" id="app"></div>
+      <div id="tabbar"></div>
+      <div class="scrim" id="sheet" hidden></div>
+    </div>
+    <div class="keys pitch-only"><div class="tip" id="tip"></div><div class="kh" data-i="keysHint"></div></div>
+    <div class="hints detail-only">
+      <b data-i="hintsH"></b>
+      <ol id="hints"></ol>
+    </div>
+  </section>
+
+  <section class="pp pitch-only" aria-live="polite">
+    <div class="pp-sees"><div class="pp-sees-top"><span class="pp-label" data-i="sees"></span><span class="badges"><span class="ml-badge priv" id="priv-badge"></span><span class="ml-badge" id="ml-badge"></span></span></div><div class="pp-chips" id="pp-chips"></div></div>
+    <div class="pp-hero" id="pp-hero"></div>
+    <div class="pp-kpis">
+      <div class="pp-kpi"><span data-i="riskL"></span><b id="pp-risk">0.00</b><div class="track"><div class="fill" id="pp-risk-f"></div></div></div>
+      <div class="pp-kpi"><span data-i="kpiML"></span><b id="pp-ml">0.00</b><small id="pp-ml-sub"></small></div>
+      <div class="pp-kpi"><span data-i="kpiNet"></span><b id="pp-net">0,00 ₼</b><small id="pp-net-sub"></small></div>
+    </div>
+    <div class="pp-foot">
+      <div class="pp-prof"><span class="pp-label" data-i="profL"></span><div class="seg" role="group"><button type="button" data-prof="regular"></button><button type="button" data-prof="saver"></button><button type="button" data-prof="newbie"></button></div><div class="pp-note" id="pp-note"></div><span class="pp-label" data-i="causesH" style="margin-top:4px"></span><div class="pp-causes" id="pp-causes"></div></div>
+      <div class="pp-money"><span class="pp-label" data-i="moneyH"></span><table class="mt" id="pp-money"></table></div>
+    </div>
+  </section>
+
+  <section class="brain detail-only">
+    <div class="bcard wide">
+      <h2><span data-i="decisionH"></span><span id="clock">0.0 s</span></h2>
+      <div class="decision" id="decision"></div>
+    </div>
+    <div class="bcard">
+      <h2><span data-i="riskH"></span></h2>
+      <div class="meter">
+        <div class="meter-top"><span data-i="riskL"></span><b id="risk-v">0.00</b></div>
+        <div class="track"><div class="fill" id="risk-f"></div></div>
+      </div>
+      <div class="meter">
+        <div class="meter-top"><span data-i="kpiML"></span><b id="intent-v">0.00</b></div>
+        <div class="track"><div class="zone"></div><div class="dot" id="intent-d"></div></div>
+        <div class="legend" data-i="legend"></div>
+      </div>
+    </div>
+    <div class="bcard">
+      <h2><span data-i="causesH"></span><span data-i="thr"></span></h2>
+      <div id="causes"></div>
+    </div>
+    <div class="bcard">
+      <h2><span data-i="memH"></span><span data-i="expL"></span></h2>
+      <p class="mem-note" data-i="memNote"></p>
+      <div class="seg" role="group"><button type="button" data-prof="regular"></button><button type="button" data-prof="saver"></button><button type="button" data-prof="newbie"></button></div>
+      <div class="legend" id="prof-note" style="margin:8px 0 12px"></div>
+      <div class="meter">
+        <div class="meter-top"><span data-i="trustL"></span><b id="trust-v">0.82</b></div>
+        <div class="track"><div class="fill" id="trust-f"></div></div>
+        <div class="legend" id="trust-last"></div>
+      </div>
+      <div class="meter-top" style="font-size:13.5px"><span data-i="peakL"></span><b id="peak-v">0.00</b></div>
+      <div class="halfh" data-i="halfH"></div>
+      <ul class="half" id="half"></ul>
+    </div>
+    <div class="bcard">
+      <h2><span data-i="outH"></span></h2>
+      <div class="split">
+        <div class="kept"><b id="kept-n">0</b><span data-i="kept"></span></div>
+        <div class="kept out"><b id="out-b">0 B</b><span data-i="out"></span></div>
+      </div>
+      <pre class="payload" id="payload"></pre>
+    </div>
+    <div class="bcard wide">
+      <h2><span data-i="mlH"></span><span>LogReg · UCI</span></h2>
+      <ul class="mlc" id="ml-card"></ul>
+    </div>
+    <div class="bcard wide">
+      <h2><span data-i="streamH"></span><span id="ev-n"></span></h2>
+      <ul class="stream" id="stream"></ul>
+    </div>
+    <div class="bcard wide">
+      <h2><span data-i="statsH"></span></h2>
+      <div class="stats">
+        <div class="stat"><b id="s-shown">0</b><span data-i="sShown"></span></div>
+        <div class="stat"><b id="s-acc">0</b><span data-i="sAcc"></span></div>
+        <div class="stat"><b id="s-dec">0</b><span data-i="sDec"></span></div>
+        <div class="stat"><b id="s-saved">0</b><span data-i="sSaved"></span></div>
+        <div class="stat"><b id="s-cost">0</b><span data-i="statCost"></span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p data-i="foot"></p>
+  <p><span data-i="credits"></span> <a href="https://unsplash.com">unsplash.com</a></p>
+</footer>
+
+<div class="roi" id="src" hidden>
+  <div class="roi-box" role="dialog" aria-modal="true" aria-labelledby="src-h">
+    <div class="roi-head"><h2 id="src-h" data-i="srcH"></h2><button type="button" class="op" id="src-close" data-i="close"></button></div>
+    <section class="ev" id="ev"></section>
+    <p class="src-lead" data-i="srcLead"></p>
+    <table class="src-t" id="src-t"></table>
+    <p class="roi-be" id="src-robust"></p>
+  </div>
+</div>
+<div class="roi" id="roi" hidden>
+  <div class="roi-box" role="dialog" aria-modal="true" aria-labelledby="roi-h">
+    <div class="roi-head"><h2 id="roi-h" data-i="roiH"></h2><button type="button" class="op" id="roi-close" data-i="close"></button></div>
+    <div class="roi-grid">
+      <div class="roi-in" id="roi-in"></div>
+      <div class="roi-out"><table class="roi-t" id="roi-t"></table><div class="roi-bars" id="roi-bars"></div><div class="roi-be" id="roi-be"></div><p class="roi-ev" id="roi-ev"></p><p class="roi-note" data-i="roiNote"></p></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var TAU = 45000, TAU_OFF = 180000, THR = 0.62;
+
+  /* ================= i18n ================= */
+  var I18N = {
+    az: {
+      sub:"· canlı demo",
+      lead:"Solda müştərinin telefonu, sağda sistemin real vaxtda gördüyü siqnallar, səbəb təxmini və qərarı.",
+      ops:"Ekrandan kənar", opDelay:"Sifariş gecikdi", opReturn:"Qaytarma açıldı", opComp:"Rəqib 8% ucuz", reset:"Sıfırla",
+      hintsH:"Sınayın",
+      hints:["«Daimi» profildə qulaqlığın qiymətinə 3 dəfə toxunun.","Profili «Qənaətcil» edin və eyni şeyi təkrarlayın: sistem bunu normal sayır.","Səbətə atın və səbətdə 15 s heç nə etməyin.","Köynəkdə ölçü cədvəlini açın, ölçünü 2 dəfə dəyişin.","Ödənişdə «Ödə» düyməsini tez-tez basın.","«Sifariş gecikdi» düyməsini basın və etibarın necə düşdüyünə baxın."],
+      decisionH:"Qərar", riskH:"Risk və niyyət", riskL:"Getmə riski", intentL:"Alış ehtimalı",
+      legend:"Rəngli zona 0.05–0.60: tədbirin nəticəni dəyişə biləcəyi tərəddüd zonası. Ondan yuxarıda müştəri onsuz da alır.",
+      causesH:"Səbəb təxmini", thr:"hədd 0.62", streamH:"Canlı siqnallar", events:"{n} hadisə",
+      outH:"Cihazdan nə çıxır", kept:"xam hadisə telefonda qalır", out:"serverə gedən yeganə məlumat", noPayload:"Hələ heç nə göndərilməyib.",
+      statsH:"Sessiya nəticələri", sShown:"göstərilən tədbir", sAcc:"qəbul edildi", sDec:"rədd edildi", sSaved:"qorunan səbət dəyəri",
+      foot:"Demo: səbəb balları şəffaf, əl ilə yazılmış qaydalarla hesablanır və bütün hadisələr bu brauzerdə qalır. Real versiyada bu qaydaların yerinə real sessiya və sifariş datası üzərində öyrədilmiş model işləyir. DemoShop uydurma mağazadır.",
+      credits:"Məhsul şəkilləri:",
+      pillAct:"Müdaxilə", pillSkip:"Müdaxilə yoxdur", pillWatch:"İzlənir",
+      watchMain:"Siqnallar normaldır", watchSub:"Hər hadisədə 5 səbəb yenidən hesablanır. Hər hansı səbəb 0.62-ni keçəndə sistem ona uyğun tədbir seçir.",
+      actSub:"Səbəb balı {s}, alış ehtimalı {i}.", whyFriction:"Texniki maneə alışı bloklayır, uplift yoxlaması tələb olunmur.", whySilent:"Ekrandan kənar uğursuzluq: müştəri şikayət etməmiş bərpa.", whyZone:"Müştəri tərəddüd zonasındadır, tədbir nəticəni dəyişə bilər.",
+      outcome:" Nəticə: {o}.", oAcc:"qəbul edildi", oDec:"rədd edildi", lat:"Siqnaldan tədbirə: {ms} ms · kupon göndərilmədi",
+      skipMain:"{c} görünür, amma tədbir lazım deyil", skipSub:"Alış ehtimalı {i}: müştəri onsuz da alacaq. Endirim və ya qalxan burada boşa xərclənərdi.",
+      decStream:"Qərar: {k}", decSkip:"Qərar: müdaxilə yoxdur", ticket:"Məhsul komandasına bilet", ticketD:"ödəniş düyməsi, təkrar kliklər",
+      cause:{price:"Qiymət tərəddüdü", delivery:"Çatdırılma narahatlığı", fit:"Ölçü və keyfiyyət şübhəsi", friction:"Texniki sürtünmə", silent:"Səssiz uğursuzluq"},
+      ev:{queue_check:"Növbə yoxlanışı", off_charger:"Şarj cihazı dayandı", view_home:"Ana səhifə", view_product:"Məhsul baxışı", view_cart:"Səbət açıldı", view_checkout:"Ödəniş səhifəsi", price_tap:"Qiymətə toxunuş", cart_add:"Səbətə əlavə", cart_remove:"Səbətdən çıxarma", delivery_check:"Çatdırılma yoxlanışı", reviews_read:"Rəylər oxundu", size_chart:"Ölçü cədvəli açıldı", size_select:"Ölçü seçildi", size_switch:"Ölçü dəyişdi", rage_click:"Rage click", dead_click:"Ölü klik", form_error:"Ödəniş xətası", back_nav:"Tez geri qayıtdı", idle:"Hərəkətsizlik 12 s", purchase:"Alış tamamlandı", offer_accept:"Təklif qəbul edildi", offer_decline:"Təklif rədd edildi", off_delay:"Sifariş 3 gün gecikdi", off_return:"Qaytarma sorğusu açıldı", off_competitor:"Rəqib qiyməti 8% aşağı", watch_add:"İzləmə siyahısına əlavə"},
+      search:"Məhsul, brend, kateqoriya axtar", searchBtn:"Axtar", cats:["Elektronika","Moda","Ev","İdman","Kolleksiya"],
+      promoH:"Payız həftəsi", promoS:"Seçilmiş məhsullarda 40%-ə qədər endirim",
+      dealsH:"Günün təklifləri", forYou:"Sizin üçün", seeAll:"Hamısı", freeShip:"Pulsuz çatdırılma", watchers:"{n} nəfər izləyir", sold:"{n} satılıb",
+      bids:"{n} təklif · {t} qaldı", auction:"Hərrac", curBid:"Cari təklif", buyNow:"İndi al", addCart:"Səbətə at", cond:"Yeni", seller:"{p}% müsbət rəy",
+      priceHist:"qiymət tarixçəsi", last30:"Son 30 gün: {r}", shielded:"Qiymət 30 gün qorunur", size:"Ölçü", sizeChart:"Ölçü cədvəli", closeChart:"Cədvəli bağla",
+      delivery:"Çatdırılma", guaranteed:"{d}, zəmanətli", delivNote:"Bakı daxili kuryer, 2–4 iş günü. Dəqiq tarix ödənişdən sonra bəlli olur.", returns:"Qaytarma", returnsV:"30 gün, pulsuz", reviews:"Rəylər ({n})",
+      added:"Səbətə əlavə olundu", cartH:"Səbət", cartEmpty:"Səbət boşdur.", backShop:"Alış-verişə qayıt", total:"Cəmi", toCheckout:"Ödənişə keç",
+      checkoutH:"Ödəniş", address:"Ünvan", addressV:"Bakı, Nərimanov r.", card:"Kart", courierNote:"Kuryer gəlməzdən 1 saat əvvəl zəng edəcək.",
+      payErr:"Ödəniş alınmadı. Bir az sonra yenidən cəhd edin.", paying:"Ödəniş göndərilir…", pay:"Ödə · {v}", doneH:"Sifariş təsdiqləndi", doneDeliv:"Çatdırılma: {d}", home:"Ana səhifəyə qayıt",
+      tabs:["Ana səhifə","Axtar","Səbət","Hesab"], back:"Geri", remove:"Səbətdən çıxar", watch:"İzlə", sizeLbl:"Ölçü {s}", shieldedShort:"qiymət qorunur", no:"Lazım deyil",
+      attempt:"cəhd {n}", items:"{n} məhsul", opened:"açdı", closed:"bağladı", deadSearch:"axtarış sahəsi", deadImg:"məhsul şəkli", deadTab:"hesab düyməsi",
+      offD:"sifariş #48213", offR:"sifariş #47990", offC:"qiymət monitorinqi",
+      months:["yanvar","fevral","mart","aprel","may","iyun","iyul","avqust","sentyabr","oktyabr","noyabr","dekabr"],
+      appShop:"Mağaza", appSt:"Stansiya", roiBtn:"ROI", close:"Bağla",
+      scShop:["Qiymət","Ödəniş","Ölçü","Gecikmə"], scSt:["Növbə","Kalonka","Şarj","Market"],
+      scenTipSt:["","Növbə sətrini bir neçə dəfə açın","«Ödə» düyməsini tez-tez basın","Şarj gedir: sistem cihazın dayandığını özü görür","Kombonun qiymətinə 3 dəfə toxunun"],
+      causeSt:{delivery:"Növbə narahatlığı"},
+      econ:"Gözlənilən xərc {c} · risk altındakı alış {v}", econSilent:"Gözlənilən xərc {c} · məqsəd: etibarı bərpa etmək",
+      kpiML:"Alış ehtimalı (ML)", kpiMLSub:"model {p} · düzəliş {d}", mlBadge:"ML · {n} real sessiya · AUC {a}",
+      mlH:"ML modeli: alış niyyəti", mlData:"Data: UCI Online Shoppers, {n} real e-ticarət sessiyası",
+      mlTest:"Görülməmiş {t} sessiyada AUC {a} (gradient boosting {g})", mlLift:"Ən yüksək 10%-də alış: {p} (orta {b}%)",
+      mlCal:"Kalibrasiya: Brier {x} (baza {y})", mlNow:"İndi: model {p}, sessiya düzəlişi {d} → {i}",
+      mlFeat:"Ən təsirli xüsusiyyətlər: səhifə dəyəri, bounce, məhsul baxışları, yeni ziyarətçi",
+      mlSplit:"Səbəb qatı hələ şəffaf qaydalarla işləyir, çünki səbəb etiketli açıq dataset yoxdur. Pilotda «səbəb → tədbir → nəticə» etiketləri toplanıb ikinci model öyrədiləcək.",
+      mlStation:"Stansiya ssenarisində eyni e-ticarət modeli işləyir; SOCAR pilot datası ilə yenidən öyrədiləcək.",
+      statCost:"tədbir xərci",
+      fuels:["Aİ-92","Aİ-95","Dizel","CNG"], fuelNote:"Yanacaq qiymətləri dövlət tərəfindən tənzimlənir: tətbiq qiyməti deyil, xidməti qoruyur.",
+      stName:"Nərimanov YDM", stMeta:"0.8 km · 24/7 açıqdır · 8 kalonka",
+      svcWash:"Avtoyuma", svcWashS:"növbə ~25 dəq", svcEV:"EV şarj", svcEVS:"2 yerdən 1-i boşdur", svcPump:"Kalonkada ödə", svcPumpS:"maşından düşmədən", svcMarket:"Qəhvə və market", svcMarketS:"5 dəq-də hazır",
+      queue:"Növbə", queueV:"~25 dəq", queueNote:"Önünüzdə 4 avtomobil var. Bir yuma orta hesabla 6 dəqiqə çəkir.", slot:"Vaxt seçin", slotOK:"{d}, zəmanətli", book:"Rezerv et · {v}",
+      pump:"Kalonka", fuel:"Yanacaq", amount:"Məbləğ",
+      evC1:"Şarj #1", evC2:"Şarj #2 · sizin", evPower:"22 kW · AC", evBusy:"məşğul", evDown:"dayandı", evOk:"şarj gedir",
+      preorder:"Sifariş et · 5 dəq-də hazır", stDoneSub:"Stansiyada sizi gözləyirik.", stBack:"Stansiyaya qayıt",
+      tabsSt:["Stansiya","Xəritə","Sifarişlər","Hesab"], offEV:"Şarj #2, sessiya ortasında",
+      roiH:"100 riskli müştəri: şirkət nə qazanır, nə itirir?",
+      roiIn:{N:"Riskli müştəri sayı", B:"Orta səbət", m:"Marja", c0:"Tədbirsiz alış faizi", u:"Tədbirin əlavə təsiri (uplift)", cp:"Kupon endirimi", sh:"Qalxanın gözlənilən xərci (səbətdən)", s:"Tərəddüd zonasında olanlar", fee:"PoF haqqı (əlavə marjadan)"},
+      roiCol:["Heç nə","Hamıya kupon","PoF (hədəfli)"],
+      roiRows:["Alış edənlər","Əlavə alış","Əlavə marja","Tədbir xərci","PoF haqqı","Şirkətə xalis təsir"],
+      roiBE:"Tədbirin əlavə təsiri {u} və ya daha çox olsa, PoF zərərə düşmür.", roiBEno:"Bu parametrlərlə PoF zərərsizlik nöqtəsinə çatmır: qalxanın xərci marjadan böyükdür.",
+      roiNote:"Bütün rəqəmlər fərziyyədir. Kupon üçün də eyni uplift götürülüb, bu da kupona üstünlük verir. Real uplift pilotda nəzarət qrupu ilə ölçüləcək. Sürgüləri münsiflə birlikdə dəyişin.",
+      ppU:"f.b.",
+      evH:"Əsas fərziyyə real eksperimentdə yoxlanıldı: səbəbə uyğun tədbir qazandırır, yanlış tədbir qazandırmır",
+      evLead:"64 000 müştəri təsadüfi olaraq üç qrupa bölünüb: kişi kataloqu e-poçtu, qadın kataloqu e-poçtu, heç nə. Təsadüfi bölgü tədbirin əsl təsirini birbaşa ölçməyə imkan verir. Pul hesabı ROI-dəki kimidir: marja 25%, alış edənə 10% kupon.",
+      evAxis:"Tədbirsizliyə nisbətən xalis marja, 1000 müştəriyə (95% interval)",
+      evPol:{blanket_wrong:["Hamıya yanlış tədbir","qadın kataloqu"], blanket_random:["Hamıya təsadüfi tədbir",""], blanket_best:["Hamıya ən yaxşı tədbir","yalnız sonradan bilinir"], matched:["Səbəbə uyğun tədbir","sıfırdan yuxarı yeganə interval"]},
+      evHetH:"Eyni tədbir (qadın kataloqu): alış ehtimalının artımı, f.b.",
+      evHet:{womens_only:"Qadın məhsulu alanlar", mens_only:"Kişi məhsulu alanlar"},
+      evConv:"alış, tədbir alanlarda", evSpend:"xərc", evVisit:"sayta giriş",
+      evMeth:"Siyasətlərin dəyəri IPW ilə qərəzsiz qiymətləndirilib, intervallar 1000 bootstrap ilə. Uyğunluq qaydası əvvəlcədən sabitdir, datadan öyrənilməyib. Kontekst e-poçtdur, tətbiq daxili təklif deyil: pilotda öz datamızla təkrarlanacaq.",
+      roiEvidence:"Real eksperimentdə (64 000 müştəri): hamıya yanlış tədbir {w}, səbəbə uyğun tədbir {m} / 1000 müştəri; tədbir alışı {c} artırıb.",
+      srcBtn:"Mənbələr", kpiNet:"Sessiyanın xalis təsiri", kpiNetSub:"{n} qəbul edilmiş tədbir · xərc {c}", privBadge:"Cihazdan çıxan: {b} bayt",
+      moneyH:"Pul: kim ödəyir, nə qazanır", moneyEmpty:"Tədbir göstəriləndə burada xərci, kimin ödədiyi və gözlənilən qazanc görünəcək.",
+      mAction:"Tədbir", mPayer:"Kim ödəyir", mCost:"Gözlənilən xərc", mInc:"Gözlənilən əlavə marja ({v} alışdan)", mIncLtv:"Gözlənilən əlavə marja (90 günlük dəyər {v})", mNet:"Gözlənilən xalis",
+      econ2:"Xərc {c} → gözlənilən xalis {g}",
+      payer:{price:"Mağaza, kupon büdcəsinin yerinə", delivery:"Mağaza, yalnız gecikmə olarsa", fit:"Mağaza, yalnız qaytarma olarsa", friction:"Mağaza, ehtiyat kanalın komissiyası", silentD:"Mağaza, kompensasiya büdcəsindən", silentR:"Mağaza, kuryer xərci"},
+      srcH:"Rəqəmlər haradan gəlir?", srcLead:"Hər parametrin mənbəyi açıq göstərilib: data üzərində öyrədilib, sənaye standartıdır, ədəbiyyatdakı prinsipə əsaslanır, yoxsa fərziyyədir. Fərziyyələrin hamısı pilotun ilk 30 günündə ölçüləcək.",
+      srcCols:["Parametr","Dəyər","Mənbə","Status və pilotda necə ölçülür"], srcLink:"mənbə", srcStatus:{data:"Data", std:"Sənaye standartı", lit:"Prinsip: ədəbiyyat", hyp:"Fərziyyə", exp:"Eksperiment"},
+      srcML:["Alış ehtimalı modeli (11 xüsusiyyət)","UCI Online Shoppers: 12 330 real sessiya, görülməmiş 2 466 sessiyada test.","Pilotda mağazanın öz datası ilə yenidən öyrədilir."],
+      srcRage:["Rage click tərifi","Contentsquare-in tərifi: element 2 saniyədən az müddətdə ən azı 3 dəfə kliklənir.","Dəyişmir."],
+      srcNeg:["Etibar: mənfi hadisə müsbətdən ağırdır","Prinsip: Baumeister və həmkarları, 2001, «Bad Is Stronger Than Good». Rəqəmlərin özü fərziyyədir.","Pilotda: gecikmədən sonra 90 günlük qayıtma faizi ölçülür."],
+      srcPeak:["Pik an (peak-end)","Prinsip: Kahneman və həmkarları, 1993. Hədd fərziyyədir.","Pilotda: sessiyadan sonra qısa sorğu və qayıtma datası."],
+      srcUplift:["Tədbirin əlavə təsiri (uplift)","Hillstrom eksperimenti: alış nisbətən +87% (95%: +62% … +111%). ROI-dəki fərziyyəmiz (15% → 25%) nisbətən +67%-dir, yəni ölçülmüşdən aşağıdır.","Pilotda: müştərilərin 10%-i nəzarət qrupuna düşür, öz kontekstimizdə ölçülür."],
+      srcShield:["Qalxanın xərci: qiymətin düşmə ehtimalı × orta düşüş","Fərziyyə.","Pilotda: mağazanın 90 günlük qiymət tarixçəsindən hesablanır."],
+      srcThr:["Səbəb həddi","Fərziyyə.","Pilotda: uplift-i ən yüksək edən hədd ayrılmış datada seçilir."],
+      srcHalf:["Siqnalların yarımömrü","Fərziyyə.","Pilotda: sessiya hadisələri üzərində sağqalım (survival) analizi.","1 / 10 dəq"],
+      srcMargin:["Marja və 90 günlük müştəri dəyəri","Fərziyyə.","Pilotda: mağazanın maliyyə datasından götürülür."],
+      srcPage:["Səhifə dəyərləri (məhsul, səbət, ödəniş)","Demo cədvəli.","Pilotda: mağazanın analitikasından (Google Analytics PageValues)."],
+      srcRobust:"Ən vacib fərziyyə uplift-dir. ROI hesabında zərərsizlik nöqtəsi {be}, fərziyyəmiz isə {u} təşkil edir. Yəni uplift gözlədiyimizdən {x} dəfə az çıxsa belə, şirkət zərərə düşmür.",
+      expL:"eksperimental", memNote:"Bu bölmədəki rəqəmlər fərziyyədir və pitch-də göstərilmir. Mənbələri «Mənbələr» panelindədir.",
+      mPitch:"Pitch", mDetail:"Ətraflı", scenL:"Ssenari", sc1:"Qiymət", sc2:"Ödəniş", sc3:"Ölçü", sc4:"Gecikmə", profL:"Müştəri profili",
+      keysHint:"Klaviatura: 1–4 ssenari · R sıfırla · P rejim · L dil",
+      scenTip:["","Qiymətə 3 dəfə toxunun","«Ödə» düyməsini tez-tez basın","Ölçü cədvəlini açın, ölçünü 2 dəfə dəyişin","Müştəri heç nə etmir, sistem özü reaksiya verir"],
+      sees:"Sistem indi görür", kpiOut:"Cihazdan çıxan", kpiOutSub:"{n} xam hadisə telefonda qaldı", latLabel:"siqnaldan tədbirə", noCoupon:"kupon göndərilmədi",
+      ppWatch:"Müştərini izləyir", ppWatchSub:"Telefonda nəsə edin: sistem hər toxunuşu oxuyur və səbəbini təxmin edir.",
+      ppNormMain:"Normal davranış", ppNorm:"Qiymətə {n} dəfə baxdı, amma bu müştəri üçün bu normaldır (adi: {b}). Tədbir lazım deyil.",
+      memH:"Müştəri yaddaşı", trustL:"Etibar (uzunmüddətli)", peakL:"Sessiyanın ən pis anı",
+      prof:{regular:"Daimi", saver:"Qənaətcil", newbie:"Yeni"},
+      profNote:{regular:"Ritmi sabitdir, etibarı yüksəkdir.", saver:"Qiyməti həmişə yoxlayır: 2–3 baxış onun üçün normaldır.", newbie:"Hələ etibar yoxdur: çatdırılma, ölçü və texniki problemlər ona daha güclü təsir edir."},
+      halfH:"Siqnal nə qədər yadda qalır", half:["Əsəb (rage click): ~1 dəq","Şübhə (qiymət, ölçü): ~10 dəq","Pozulmuş vəd (gecikmə): günlərlə"],
+      why:"Niyə: {r}.", mechL:"Psixoloji mexanizm: {m}",
+      mech:{price:"itki qorxusu", delivery:"qeyri-müəyyənlikdən qaçma", fit:"peşmançılıq qorxusu", friction:"frustrasiya", silent:"pozulmuş vəd, mənfiyə meyl"},
+      ph:{queue_check:"növbəni {n} dəfə yoxladı", off_charger:"şarj cihazı sessiya ortasında dayandı", sil_st_wash:"yuma səhifəsində {n} s tərəddüd etdi", sil_st_market:"{n} s heç nə etmədi", price_tap:"qiymətə {n} dəfə baxdı", price_tap_b:"qiymətə {n} dəfə baxdı (onun üçün adi: {b})", cart_remove:"səbətdən {n} dəfə çıxardı", cart_remove_b:"səbətdən {n} dəfə çıxardı (adi: {b})", off_competitor:"rəqibdə qiymət 8% aşağıdır", sil_cart:"səbətdə {n} s heç nə etmədi", delivery_check:"çatdırılma tarixini {n} dəfə yoxladı", sil_checkout:"ödənişdə {n} s dayandı", size_chart:"ölçü cədvəlini {n} dəfə açdı", size_switch:"ölçünü {n} dəfə dəyişdi", reviews_s:"rəyləri {n} s oxudu", sil_product:"məhsulda {n} s tərəddüd etdi", rage_click:"eyni düyməni əsəbi basdı ({n})", dead_click:"işləməyən yerə {n} dəfə toxundu", form_error:"ödəniş {n} dəfə alınmadı", off_delay:"son sifarişi 3 gün gecikib", off_return:"qaytarma sorğusu açıb", trust:"etibarı aşağıdır ({v})", stack:"{n} narahatlıq üst-üstə yığılıb"},
+      skipFatigueMain:"Tədbir göstərilmir: təklif yorğunluğu", skipFatigueSub:"Bu sessiyada artıq {n} təklif göstərilib. Daha çoxu müştərini yorar və etibarı azaldar.",
+      bumpNote:"Müştəri «yox» dedi: bu səbəb üçün hədd {v} oldu, sistem israr etmir.", silence:"Tərəddüd: {n} s səssizlik",
+      offer:{
+        queue:{k:"Zəmanətli slot", t:"{d} slotu sizindir", b:"Bu vaxta zəmanət veririk. 10 dəqiqədən çox gözləsəniz, yuma pulsuzdur.", c:"Slotu təsdiqlə"},
+        silentEV:{k:"Narahat olmayın", t:"Şarjı başqa yerdə davam etdirək", b:"Şarj #2 dayandı. 1.2 km-də, Nobel prospektindəki məntəqədə boş şarj yeri sizin üçün 20 dəqiqə saxlanıldı. Balansınıza 5 ₼ yazdıq.", c:"Marşrutu aç"},
+        price:{k:"Qiymət qalxanı", t:"Bu qiymət 30 gün sizindir", b:"{p} üçün qiymət 30 gün qorunur. Bu müddətdə qiymət düşsə, fərq balansınıza qayıdır.", c:"Qalxanı aktivləşdir"},
+        delivery:{k:"Zəmanətli çatdırılma", t:"Çatdırılma: {d}", b:"Bu tarixə zəmanət veririk. Gecikərsə çatdırılma pulsuz olur və balansınıza 5 ₼ yazılır.", c:"Zəmanəti qəbul et"},
+        fit:{k:"Ölçü köməkçisi", t:"Sizə {s} ölçüsü uyğundur", b:"Ölçü cədvəlinə və alıcı rəylərinə görə {s} seçməyi tövsiyə edirik. Uyğun gəlməsə, qaytarma pulsuzdur.", c:"{s} ölçüsünü seç"},
+        friction:{k:"Ödənişdə problem", t:"Ödənişi bir toxunuşla tamamlayaq?", b:"Ödəniş xidmətində gecikmə aşkarlandı. Yadda saxlanmış Visa •••• 4417 kartı ilə ehtiyat kanaldan ödəyə bilərik.", c:"Bir toxunuşla ödə"},
+        silentD:{k:"Üzr istəyirik", t:"Sifarişiniz gecikdi", b:"Son sifarişiniz 3 gün gecikib. Kuryer bu gün 18:00-a qədər çatdıracaq. Narahatlığa görə balansınıza 5 ₼ yazdıq.", c:"Təşəkkürlər"},
+        silentR:{k:"Qaytarma", t:"Qaytarmanı biz həll edirik", b:"Kuryer sabah 10:00–14:00 arası məhsulu ünvanınızdan götürəcək. Pul 24 saat ərzində kartınıza qayıdacaq.", c:"Uyğundur"}
+      }
+    },
+    tr: {
+      sub:"· canlı demo",
+      lead:"Solda müşterinin telefonu, sağda sistemin gerçek zamanlı gördüğü sinyaller, neden tahmini ve kararı.",
+      ops:"Ekran dışı", opDelay:"Sipariş gecikti", opReturn:"İade açıldı", opComp:"Rakip %8 ucuz", reset:"Sıfırla",
+      hintsH:"Deneyin",
+      hints:["«Sadık» profilde kulaklığın fiyatına 3 kez dokunun.","Profili «Tasarrufçu» yapıp aynısını tekrarlayın: sistem bunu normal sayar.","Sepete ekleyin ve sepette 15 sn hiçbir şey yapmayın.","Gömlekte beden tablosunu açın, bedeni 2 kez değiştirin.","Ödemede «Öde» düğmesine hızlı hızlı basın.","«Sipariş gecikti» düğmesine basın ve güvenin nasıl düştüğüne bakın."],
+      decisionH:"Karar", riskH:"Risk ve niyet", riskL:"Ayrılma riski", intentL:"Satın alma olasılığı",
+      legend:"Renkli bölge 0.05–0.60: aksiyonun sonucu değiştirebileceği kararsızlık bölgesi. Üstünde müşteri zaten satın alır.",
+      causesH:"Neden tahmini", thr:"eşik 0.62", streamH:"Canlı sinyaller", events:"{n} olay",
+      outH:"Cihazdan ne çıkıyor", kept:"ham olay telefonda kalır", out:"sunucuya giden tek veri", noPayload:"Henüz hiçbir şey gönderilmedi.",
+      statsH:"Oturum sonuçları", sShown:"gösterilen aksiyon", sAcc:"kabul edildi", sDec:"reddedildi", sSaved:"korunan sepet değeri",
+      foot:"Demo: neden puanları şeffaf, elle yazılmış kurallarla hesaplanır ve tüm olaylar bu tarayıcıda kalır. Gerçek sürümde bu kuralların yerine gerçek oturum ve sipariş verisiyle eğitilmiş bir model çalışır. DemoShop hayali bir mağazadır.",
+      credits:"Ürün fotoğrafları:",
+      pillAct:"Müdahale", pillSkip:"Müdahale yok", pillWatch:"İzleniyor",
+      watchMain:"Sinyaller normal", watchSub:"Her olayda 5 neden yeniden hesaplanır. Herhangi bir neden 0.62’yi geçince sistem ona uygun aksiyonu seçer.",
+      actSub:"Neden puanı {s}, satın alma olasılığı {i}.", whyFriction:"Teknik engel satın almayı blokluyor, uplift kontrolü gerekmez.", whySilent:"Ekran dışı aksaklık: müşteri şikâyet etmeden telafi.", whyZone:"Müşteri kararsızlık bölgesinde, aksiyon sonucu değiştirebilir.",
+      outcome:" Sonuç: {o}.", oAcc:"kabul edildi", oDec:"reddedildi", lat:"Sinyalden aksiyona: {ms} ms · kupon gönderilmedi",
+      skipMain:"{c} görülüyor, ama aksiyon gerekmiyor", skipSub:"Satın alma olasılığı {i}: müşteri zaten alacak. İndirim ya da kalkan burada boşa harcanırdı.",
+      decStream:"Karar: {k}", decSkip:"Karar: müdahale yok", ticket:"Ürün ekibine kayıt", ticketD:"öde düğmesi, tekrarlı tıklamalar",
+      cause:{price:"Fiyat kararsızlığı", delivery:"Kargo endişesi", fit:"Beden ve kalite şüphesi", friction:"Teknik sürtünme", silent:"Sessiz aksaklık"},
+      ev:{queue_check:"Kuyruk kontrolü", off_charger:"Şarj cihazı durdu", view_home:"Ana sayfa", view_product:"Ürün görüntüleme", view_cart:"Sepet açıldı", view_checkout:"Ödeme sayfası", price_tap:"Fiyata dokunma", cart_add:"Sepete ekleme", cart_remove:"Sepetten çıkarma", delivery_check:"Kargo kontrolü", reviews_read:"Yorumlar okundu", size_chart:"Beden tablosu açıldı", size_select:"Beden seçildi", size_switch:"Beden değişti", rage_click:"Rage click", dead_click:"Ölü tıklama", form_error:"Ödeme hatası", back_nav:"Hızlı geri dönüş", idle:"12 sn hareketsizlik", purchase:"Satın alma tamamlandı", offer_accept:"Teklif kabul edildi", offer_decline:"Teklif reddedildi", off_delay:"Sipariş 3 gün gecikti", off_return:"İade talebi açıldı", off_competitor:"Rakip fiyatı %8 düşük", watch_add:"İzleme listesine ekleme"},
+      search:"Ürün, marka, kategori ara", searchBtn:"Ara", cats:["Elektronik","Moda","Ev","Spor","Koleksiyon"],
+      promoH:"Sonbahar haftası", promoS:"Seçili ürünlerde %40’a varan indirim",
+      dealsH:"Günün fırsatları", forYou:"Sana özel", seeAll:"Tümü", freeShip:"Ücretsiz kargo", watchers:"{n} kişi izliyor", sold:"{n} satıldı",
+      bids:"{n} teklif · {t} kaldı", auction:"Açık artırma", curBid:"Güncel teklif", buyNow:"Hemen al", addCart:"Sepete ekle", cond:"Yeni", seller:"%{p} olumlu",
+      priceHist:"fiyat geçmişi", last30:"Son 30 gün: {r}", shielded:"Fiyat 30 gün korunuyor", size:"Beden", sizeChart:"Beden tablosu", closeChart:"Tabloyu kapat",
+      delivery:"Kargo", guaranteed:"{d}, garantili", delivNote:"Bakü içi kurye, 2–4 iş günü. Kesin tarih ödemeden sonra belli olur.", returns:"İade", returnsV:"30 gün, ücretsiz", reviews:"Yorumlar ({n})",
+      added:"Sepete eklendi", cartH:"Sepet", cartEmpty:"Sepetiniz boş.", backShop:"Alışverişe dön", total:"Toplam", toCheckout:"Ödemeye geç",
+      checkoutH:"Ödeme", address:"Adres", addressV:"Bakü, Nerimanov", card:"Kart", courierNote:"Kurye gelmeden 1 saat önce arayacak.",
+      payErr:"Ödeme alınamadı. Biraz sonra tekrar deneyin.", paying:"Ödeme gönderiliyor…", pay:"Öde · {v}", doneH:"Sipariş onaylandı", doneDeliv:"Teslimat: {d}", home:"Ana sayfaya dön",
+      tabs:["Ana sayfa","Ara","Sepet","Hesap"], back:"Geri", remove:"Sepetten çıkar", watch:"İzle", sizeLbl:"Beden {s}", shieldedShort:"fiyat korunuyor", no:"Gerek yok",
+      attempt:"deneme {n}", items:"{n} ürün", opened:"açtı", closed:"kapattı", deadSearch:"arama alanı", deadImg:"ürün görseli", deadTab:"hesap düğmesi",
+      offD:"sipariş #48213", offR:"sipariş #47990", offC:"fiyat takibi",
+      months:["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"],
+      appShop:"Mağaza", appSt:"İstasyon", roiBtn:"ROI", close:"Kapat",
+      scShop:["Fiyat","Ödeme","Beden","Gecikme"], scSt:["Kuyruk","Pompa","Şarj","Market"],
+      scenTipSt:["","Kuyruk satırını birkaç kez açın","«Öde» düğmesine hızlı hızlı basın","Şarj sürüyor: sistem cihazın durduğunu kendisi görür","Menünün fiyatına 3 kez dokunun"],
+      causeSt:{delivery:"Kuyruk endişesi"},
+      econ:"Beklenen maliyet {c} · risk altındaki alışveriş {v}", econSilent:"Beklenen maliyet {c} · amaç: güveni onarmak",
+      kpiML:"Satın alma olasılığı (ML)", kpiMLSub:"model {p} · düzeltme {d}", mlBadge:"ML · {n} gerçek oturum · AUC {a}",
+      mlH:"ML modeli: satın alma niyeti", mlData:"Veri: UCI Online Shoppers, {n} gerçek e-ticaret oturumu",
+      mlTest:"Görülmemiş {t} oturumda AUC {a} (gradient boosting {g})", mlLift:"En yüksek %10’da satın alma: {p} (ortalama %{b})",
+      mlCal:"Kalibrasyon: Brier {x} (taban {y})", mlNow:"Şu an: model {p}, oturum düzeltmesi {d} → {i}",
+      mlFeat:"En etkili özellikler: sayfa değeri, hemen çıkma, ürün görüntüleme, yeni ziyaretçi",
+      mlSplit:"Neden katmanı şimdilik şeffaf kurallarla çalışıyor, çünkü neden etiketli açık bir veri seti yok. Pilotta «neden → aksiyon → sonuç» etiketleri toplanıp ikinci model eğitilecek.",
+      mlStation:"İstasyon senaryosunda aynı e-ticaret modeli çalışıyor; SOCAR pilot verisiyle yeniden eğitilecek.",
+      statCost:"aksiyon maliyeti",
+      fuels:["Aİ-92","Aİ-95","Dizel","CNG"], fuelNote:"Akaryakıt fiyatları devlet tarafından düzenlenir: uygulama fiyatı değil, hizmeti korur.",
+      stName:"Nerimanov istasyonu", stMeta:"0.8 km · 7/24 açık · 8 pompa",
+      svcWash:"Oto yıkama", svcWashS:"kuyruk ~25 dk", svcEV:"EV şarj", svcEVS:"2 yerden 1’i boş", svcPump:"Pompada öde", svcPumpS:"araçtan inmeden", svcMarket:"Kahve ve market", svcMarketS:"5 dk’da hazır",
+      queue:"Kuyruk", queueV:"~25 dk", queueNote:"Önünüzde 4 araç var. Bir yıkama ortalama 6 dakika sürüyor.", slot:"Saat seçin", slotOK:"{d}, garantili", book:"Rezervasyon yap · {v}",
+      pump:"Pompa", fuel:"Yakıt", amount:"Tutar",
+      evC1:"Şarj #1", evC2:"Şarj #2 · sizin", evPower:"22 kW · AC", evBusy:"dolu", evDown:"durdu", evOk:"şarj oluyor",
+      preorder:"Sipariş ver · 5 dk’da hazır", stDoneSub:"İstasyonda sizi bekliyoruz.", stBack:"İstasyona dön",
+      tabsSt:["İstasyon","Harita","Siparişler","Hesap"], offEV:"Şarj #2, oturum ortasında",
+      roiH:"100 riskli müşteri: şirket ne kazanır, ne kaybeder?",
+      roiIn:{N:"Riskli müşteri sayısı", B:"Ortalama sepet", m:"Marj", c0:"Aksiyonsuz satın alma oranı", u:"Aksiyonun ek etkisi (uplift)", cp:"Kupon indirimi", sh:"Kalkanın beklenen maliyeti (sepetten)", s:"Kararsızlık bölgesindekiler", fee:"PoF ücreti (ek marjdan)"},
+      roiCol:["Hiçbir şey","Herkese kupon","PoF (hedefli)"],
+      roiRows:["Satın alanlar","Ek satın alma","Ek marj","Aksiyon maliyeti","PoF ücreti","Şirkete net etki"],
+      roiBE:"Aksiyonun ek etkisi {u} veya daha fazlaysa PoF zarar etmez.", roiBEno:"Bu parametrelerle PoF başa baş noktasına ulaşmıyor: kalkan maliyeti marjdan büyük.",
+      roiNote:"Tüm rakamlar varsayımdır. Kupon için de aynı uplift alındı, bu da kupona avantaj sağlar. Gerçek uplift pilotta kontrol grubuyla ölçülecek. Kaydırıcıları jüriyle birlikte değiştirin.",
+      ppU:"puan",
+      evH:"Temel varsayım gerçek bir deneyde test edildi: nedene uygun aksiyon kazandırıyor, yanlış aksiyon kazandırmıyor",
+      evLead:"64 000 müşteri rastgele üç gruba ayrıldı: erkek kataloğu e-postası, kadın kataloğu e-postası, hiçbir şey. Rastgele dağılım, aksiyonun gerçek etkisini doğrudan ölçmeyi sağlar. Para hesabı ROI’deki gibi: marj %25, satın alana %10 kupon.",
+      evAxis:"Aksiyonsuz duruma göre net marj, 1000 müşteri başına (%95 aralık)",
+      evPol:{blanket_wrong:["Herkese yanlış aksiyon","kadın kataloğu"], blanket_random:["Herkese rastgele aksiyon",""], blanket_best:["Herkese en iyi aksiyon","ancak sonradan bilinir"], matched:["Nedene uygun aksiyon","sıfırın üstünde kalan tek aralık"]},
+      evHetH:"Aynı aksiyon (kadın kataloğu): satın alma olasılığı artışı, puan",
+      evHet:{womens_only:"Kadın ürünü alanlar", mens_only:"Erkek ürünü alanlar"},
+      evConv:"satın alma, aksiyon alanlarda", evSpend:"harcama", evVisit:"site ziyareti",
+      evMeth:"Politikaların değeri IPW ile yansız tahmin edildi, aralıklar 1000 bootstrap ile. Uygunluk kuralı önceden sabittir, veriden öğrenilmedi. Bağlam e-posta, uygulama içi teklif değil: pilotta kendi verimizle tekrarlanacak.",
+      roiEvidence:"Gerçek deneyde (64 000 müşteri): herkese yanlış aksiyon {w}, nedene uygun aksiyon {m} / 1000 müşteri; aksiyon satın almayı {c} artırdı.",
+      srcBtn:"Kaynaklar", kpiNet:"Oturumun net etkisi", kpiNetSub:"{n} kabul edilen aksiyon · maliyet {c}", privBadge:"Cihazdan çıkan: {b} bayt",
+      moneyH:"Para: kim öder, ne kazanır", moneyEmpty:"Bir aksiyon gösterildiğinde maliyeti, kimin ödediği ve beklenen kazanç burada görünür.",
+      mAction:"Aksiyon", mPayer:"Kim öder", mCost:"Beklenen maliyet", mInc:"Beklenen ek marj ({v} alışverişten)", mIncLtv:"Beklenen ek marj (90 günlük değer {v})", mNet:"Beklenen net",
+      econ2:"Maliyet {c} → beklenen net {g}",
+      payer:{price:"Mağaza, kupon bütçesinin yerine", delivery:"Mağaza, yalnızca gecikme olursa", fit:"Mağaza, yalnızca iade olursa", friction:"Mağaza, yedek kanal komisyonu", silentD:"Mağaza, tazminat bütçesinden", silentR:"Mağaza, kurye maliyeti"},
+      srcH:"Rakamlar nereden geliyor?", srcLead:"Her parametrenin kaynağı açıkça gösteriliyor: veriyle eğitildi mi, sektör standardı mı, literatürdeki bir ilkeye mi dayanıyor, yoksa varsayım mı. Varsayımların hepsi pilotun ilk 30 gününde ölçülecek.",
+      srcCols:["Parametre","Değer","Kaynak","Durum ve pilotta nasıl ölçülür"], srcLink:"kaynak", srcStatus:{data:"Veri", std:"Sektör standardı", lit:"İlke: literatür", hyp:"Varsayım", exp:"Deney"},
+      srcML:["Satın alma olasılığı modeli (11 özellik)","UCI Online Shoppers: 12 330 gerçek oturum, görülmemiş 2 466 oturumda test.","Pilotta mağazanın kendi verisiyle yeniden eğitilir."],
+      srcRage:["Rage click tanımı","Contentsquare tanımı: bir öğeye 2 saniyeden kısa sürede en az 3 kez tıklanır.","Değişmez."],
+      srcNeg:["Güven: olumsuz olay olumludan ağır basar","İlke: Baumeister ve arkadaşları, 2001, «Bad Is Stronger Than Good». Rakamların kendisi varsayımdır.","Pilotta: gecikmeden sonra 90 günlük geri dönüş oranı ölçülür."],
+      srcPeak:["Zirve anı (peak-end)","İlke: Kahneman ve arkadaşları, 1993. Eşik varsayımdır.","Pilotta: oturum sonrası kısa anket ve geri dönüş verisi."],
+      srcUplift:["Aksiyonun ek etkisi (uplift)","Hillstrom deneyi: satın alma göreli olarak +%87 (%95: +%62 … +%111). ROI’deki varsayımımız (%15 → %25) göreli olarak +%67, yani ölçülenin altında.","Pilotta: müşterilerin %10’u kontrol grubuna girer, kendi bağlamımızda ölçülür."],
+      srcShield:["Kalkan maliyeti: fiyatın düşme olasılığı × ortalama düşüş","Varsayım.","Pilotta: mağazanın 90 günlük fiyat geçmişinden hesaplanır."],
+      srcThr:["Neden eşiği","Varsayım.","Pilotta: uplift’i en yükseğe çıkaran eşik ayrılmış veride seçilir."],
+      srcHalf:["Sinyallerin yarı ömrü","Varsayım.","Pilotta: oturum olayları üzerinde sağkalım (survival) analizi.","1 / 10 dk"],
+      srcMargin:["Marj ve 90 günlük müşteri değeri","Varsayım.","Pilotta: mağazanın finansal verisinden alınır."],
+      srcPage:["Sayfa değerleri (ürün, sepet, ödeme)","Demo tablosu.","Pilotta: mağazanın analitiğinden (Google Analytics PageValues)."],
+      srcRobust:"En önemli varsayım uplift. ROI hesabında başa baş noktası {be}, varsayımımız {u}. Yani uplift beklediğimizden {x} kat düşük çıksa bile şirket zarar etmez.",
+      expL:"deneysel", memNote:"Bu bölümdeki rakamlar varsayımdır ve pitch’te gösterilmez. Kaynakları «Kaynaklar» panelinde.",
+      mPitch:"Pitch", mDetail:"Detaylı", scenL:"Senaryo", sc1:"Fiyat", sc2:"Ödeme", sc3:"Beden", sc4:"Gecikme", profL:"Müşteri profili",
+      keysHint:"Klavye: 1–4 senaryo · R sıfırla · P mod · L dil",
+      scenTip:["","Fiyata 3 kez dokunun","«Öde» düğmesine hızlı hızlı basın","Beden tablosunu açın, bedeni 2 kez değiştirin","Müşteri hiçbir şey yapmıyor, sistem kendisi tepki veriyor"],
+      sees:"Sistem şu an görüyor", kpiOut:"Cihazdan çıkan", kpiOutSub:"{n} ham olay telefonda kaldı", latLabel:"sinyalden aksiyona", noCoupon:"kupon gönderilmedi",
+      ppWatch:"Müşteriyi izliyor", ppWatchSub:"Telefonda bir şey yapın: sistem her dokunuşu okur ve nedenini tahmin eder.",
+      ppNormMain:"Normal davranış", ppNorm:"Fiyata {n} kez baktı, ama bu müşteri için bu normal (olağan: {b}). Aksiyon gerekmiyor.",
+      memH:"Müşteri hafızası", trustL:"Güven (uzun vadeli)", peakL:"Oturumun en kötü anı",
+      prof:{regular:"Sadık", saver:"Tasarrufçu", newbie:"Yeni"},
+      profNote:{regular:"Ritmi düzenli, güveni yüksek.", saver:"Fiyatı hep kontrol eder: 2–3 bakış onun için normal.", newbie:"Henüz güven yok: kargo, beden ve teknik sorunlar onu daha çok etkiler."},
+      halfH:"Sinyal ne kadar hatırlanır", half:["Sinir (rage click): ~1 dk","Şüphe (fiyat, beden): ~10 dk","Bozulan söz (gecikme): günlerce"],
+      why:"Neden: {r}.", mechL:"Psikolojik mekanizma: {m}",
+      mech:{price:"kayıp korkusu", delivery:"belirsizlikten kaçınma", fit:"pişmanlık korkusu", friction:"hayal kırıklığı", silent:"bozulan söz, olumsuzluk eğilimi"},
+      ph:{queue_check:"kuyruğu {n} kez kontrol etti", off_charger:"şarj cihazı oturum ortasında durdu", sil_st_wash:"yıkama sayfasında {n} sn kararsız kaldı", sil_st_market:"{n} sn hiçbir şey yapmadı", price_tap:"fiyata {n} kez baktı", price_tap_b:"fiyata {n} kez baktı (onun için normal: {b})", cart_remove:"sepetten {n} kez çıkardı", cart_remove_b:"sepetten {n} kez çıkardı (normal: {b})", off_competitor:"rakipte fiyat %8 düşük", sil_cart:"sepette {n} sn hiçbir şey yapmadı", delivery_check:"teslim tarihini {n} kez kontrol etti", sil_checkout:"ödemede {n} sn durdu", size_chart:"beden tablosunu {n} kez açtı", size_switch:"bedeni {n} kez değiştirdi", reviews_s:"yorumları {n} sn okudu", sil_product:"üründe {n} sn kararsız kaldı", rage_click:"aynı düğmeye sinirle bastı ({n})", dead_click:"çalışmayan yere {n} kez dokundu", form_error:"ödeme {n} kez alınamadı", off_delay:"son siparişi 3 gün gecikti", off_return:"iade talebi açtı", trust:"güveni düşük ({v})", stack:"{n} endişe üst üste bindi"},
+      skipFatigueMain:"Aksiyon gösterilmiyor: teklif yorgunluğu", skipFatigueSub:"Bu oturumda zaten {n} teklif gösterildi. Daha fazlası müşteriyi yorar ve güveni düşürür.",
+      bumpNote:"Müşteri «hayır» dedi: bu neden için eşik {v} oldu, sistem ısrar etmiyor.", silence:"Kararsızlık: {n} sn sessizlik",
+      offer:{
+        queue:{k:"Garantili saat", t:"{d} saati sizin", b:"Bu saati garanti ediyoruz. 10 dakikadan fazla beklerseniz yıkama ücretsiz.", c:"Saati onayla"},
+        silentEV:{k:"Endişelenmeyin", t:"Şarja başka yerde devam edelim", b:"Şarj #2 durdu. 1.2 km ötede, Nobel caddesindeki istasyonda boş bir şarj yeri 20 dakika sizin için ayrıldı. Bakiyenize 5 ₼ ekledik.", c:"Rotayı aç"},
+        price:{k:"Fiyat kalkanı", t:"Bu fiyat 30 gün senin", b:"{p} için fiyat 30 gün korunur. Bu sürede fiyat düşerse fark bakiyene iade edilir.", c:"Kalkanı etkinleştir"},
+        delivery:{k:"Garantili teslimat", t:"Teslimat: {d}", b:"Bu tarihi garanti ediyoruz. Gecikirse kargo ücretsiz olur ve bakiyene 5 ₼ eklenir.", c:"Garantiyi kabul et"},
+        fit:{k:"Beden asistanı", t:"Sana {s} beden uygun", b:"Beden tablosu ve alıcı yorumlarına göre {s} seçmeni öneriyoruz. Olmazsa iade ücretsiz.", c:"{s} bedeni seç"},
+        friction:{k:"Ödemede sorun", t:"Ödemeyi tek dokunuşla tamamlayalım mı?", b:"Ödeme servisinde gecikme tespit edildi. Kayıtlı Visa •••• 4417 kartınla yedek kanaldan ödeyebiliriz.", c:"Tek dokunuşla öde"},
+        silentD:{k:"Özür dileriz", t:"Siparişin gecikti", b:"Son siparişin 3 gün gecikti. Kurye bugün 18:00’e kadar teslim edecek. Yaşattığımız sıkıntı için bakiyene 5 ₼ ekledik.", c:"Teşekkürler"},
+        silentR:{k:"İade", t:"İadeyi biz hallediyoruz", b:"Kurye yarın 10:00–14:00 arası ürünü adresinden alacak. Para 24 saat içinde kartına iade edilecek.", c:"Uygun"}
+      }
+    },
+    en: {
+      sub:"· live demo",
+      lead:"Left: the customer’s phone. Right: the signals the system sees in real time, its cause estimate and its decision.",
+      ops:"Off-screen", opDelay:"Order delayed", opReturn:"Return opened", opComp:"Rival 8% cheaper", reset:"Reset",
+      hintsH:"Try this",
+      hints:["On the «Regular» profile, tap the headphones price 3 times.","Switch to «Bargain hunter» and repeat: the system treats it as normal.","Add to cart and do nothing in the cart for 15 s.","On the shirt, open the size chart and switch sizes twice.","At checkout, tap «Pay» rapidly.","Press «Order delayed» and watch trust drop."],
+      decisionH:"Decision", riskH:"Risk and intent", riskL:"Churn risk", intentL:"Purchase probability",
+      legend:"Shaded zone 0.05–0.60: the undecided zone where an action can change the outcome. Above it, the customer buys anyway.",
+      causesH:"Cause estimate", thr:"threshold 0.62", streamH:"Live signals", events:"{n} events",
+      outH:"What leaves the device", kept:"raw events stay on the phone", out:"the only data sent to the server", noPayload:"Nothing sent yet.",
+      statsH:"Session results", sShown:"actions shown", sAcc:"accepted", sDec:"declined", sSaved:"basket value retained",
+      foot:"Demo: cause scores come from transparent, hand-written rules, and every event stays in this browser. In production, a model trained on real session and order data replaces these rules. DemoShop is a fictional store.",
+      credits:"Product photos:",
+      pillAct:"Intervene", pillSkip:"No action", pillWatch:"Watching",
+      watchMain:"Signals look normal", watchSub:"All 5 causes are recomputed on every event. When any cause passes 0.62, the system picks the matching action.",
+      actSub:"Cause score {s}, purchase probability {i}.", whyFriction:"A technical blocker stops the purchase, so no uplift check is needed.", whySilent:"Off-screen failure: recovery before the customer complains.", whyZone:"The customer is in the undecided zone, so an action can change the outcome.",
+      outcome:" Outcome: {o}.", oAcc:"accepted", oDec:"declined", lat:"Signal to action: {ms} ms · no coupon sent",
+      skipMain:"{c} detected, but no action needed", skipSub:"Purchase probability {i}: the customer will buy anyway. A discount or shield would be wasted here.",
+      decStream:"Decision: {k}", decSkip:"Decision: no action", ticket:"Ticket to product team", ticketD:"pay button, repeated taps",
+      cause:{price:"Price hesitation", delivery:"Delivery concern", fit:"Size and quality doubt", friction:"Technical friction", silent:"Silent failure"},
+      ev:{queue_check:"Queue check", off_charger:"Charger stopped", view_home:"Home", view_product:"Product view", view_cart:"Cart opened", view_checkout:"Checkout page", price_tap:"Price tap", cart_add:"Add to cart", cart_remove:"Remove from cart", delivery_check:"Delivery check", reviews_read:"Reviews read", size_chart:"Size chart opened", size_select:"Size selected", size_switch:"Size switched", rage_click:"Rage click", dead_click:"Dead click", form_error:"Payment error", back_nav:"Quick bounce", idle:"Idle 12 s", purchase:"Purchase completed", offer_accept:"Offer accepted", offer_decline:"Offer declined", off_delay:"Order 3 days late", off_return:"Return request opened", off_competitor:"Rival price 8% lower", watch_add:"Added to watchlist"},
+      search:"Search products, brands, categories", searchBtn:"Search", cats:["Electronics","Fashion","Home","Sports","Collectibles"],
+      promoH:"Autumn week", promoS:"Up to 40% off selected items",
+      dealsH:"Today’s deals", forYou:"Picked for you", seeAll:"See all", freeShip:"Free delivery", watchers:"{n} watching", sold:"{n} sold",
+      bids:"{n} bids · {t} left", auction:"Auction", curBid:"Current bid", buyNow:"Buy it now", addCart:"Add to cart", cond:"New", seller:"{p}% positive",
+      priceHist:"price history", last30:"Last 30 days: {r}", shielded:"Price protected for 30 days", size:"Size", sizeChart:"Size chart", closeChart:"Close chart",
+      delivery:"Delivery", guaranteed:"{d}, guaranteed", delivNote:"Courier within Baku, 2–4 business days. The exact date is set after payment.", returns:"Returns", returnsV:"30 days, free", reviews:"Reviews ({n})",
+      added:"Added to cart", cartH:"Cart", cartEmpty:"Your cart is empty.", backShop:"Back to shopping", total:"Total", toCheckout:"Go to checkout",
+      checkoutH:"Checkout", address:"Address", addressV:"Baku, Narimanov", card:"Card", courierNote:"The courier will call 1 hour before arrival.",
+      payErr:"Payment failed. Please try again in a moment.", paying:"Sending payment…", pay:"Pay · {v}", doneH:"Order confirmed", doneDeliv:"Delivery: {d}", home:"Back to home",
+      tabs:["Home","Search","Cart","Account"], back:"Back", remove:"Remove from cart", watch:"Watch", sizeLbl:"Size {s}", shieldedShort:"price protected", no:"No thanks",
+      attempt:"attempt {n}", items:"items: {n}", opened:"opened", closed:"closed", deadSearch:"search field", deadImg:"product image", deadTab:"account button",
+      offD:"order #48213", offR:"order #47990", offC:"price monitoring",
+      months:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+      appShop:"Shop", appSt:"Station", roiBtn:"ROI", close:"Close",
+      scShop:["Price","Payment","Size","Delay"], scSt:["Queue","Pump","Charging","Market"],
+      scenTipSt:["","Open the queue row a few times","Tap «Pay» rapidly","Charging is running: the system notices the charger stop on its own","Tap the combo price 3 times"],
+      causeSt:{delivery:"Queue anxiety"},
+      econ:"Expected cost {c} · purchase at risk {v}", econSilent:"Expected cost {c} · goal: rebuild trust",
+      kpiML:"Purchase probability (ML)", kpiMLSub:"model {p} · adj. {d}", mlBadge:"ML · {n} real sessions · AUC {a}",
+      mlH:"ML model: purchase intent", mlData:"Data: UCI Online Shoppers, {n} real e-commerce sessions",
+      mlTest:"AUC {a} on {t} unseen sessions (gradient boosting {g})", mlLift:"Purchases in the top 10%: {p} (average {b}%)",
+      mlCal:"Calibration: Brier {x} (baseline {y})", mlNow:"Now: model {p}, session adjustment {d} → {i}",
+      mlFeat:"Strongest features: page value, bounce rate, product views, new visitor",
+      mlSplit:"The cause layer still runs on transparent rules, because no open dataset labels the causes. The pilot will collect «cause → action → outcome» labels to train a second model.",
+      mlStation:"The station scenario uses the same e-commerce model; it will be retrained on SOCAR pilot data.",
+      statCost:"action cost",
+      fuels:["AI-92","AI-95","Diesel","CNG"], fuelNote:"Fuel prices are set by the state, so the app protects the service, not the price.",
+      stName:"Narimanov station", stMeta:"0.8 km · open 24/7 · 8 pumps",
+      svcWash:"Car wash", svcWashS:"queue ~25 min", svcEV:"EV charging", svcEVS:"1 of 2 bays free", svcPump:"Pay at pump", svcPumpS:"without leaving the car", svcMarket:"Coffee and market", svcMarketS:"ready in 5 min",
+      queue:"Queue", queueV:"~25 min", queueNote:"4 cars are ahead of you. One wash takes about 6 minutes.", slot:"Pick a time", slotOK:"{d}, guaranteed", book:"Book · {v}",
+      pump:"Pump", fuel:"Fuel", amount:"Amount",
+      evC1:"Charger #1", evC2:"Charger #2 · yours", evPower:"22 kW · AC", evBusy:"busy", evDown:"stopped", evOk:"charging",
+      preorder:"Order · ready in 5 min", stDoneSub:"We’ll be ready for you at the station.", stBack:"Back to station",
+      tabsSt:["Station","Map","Orders","Account"], offEV:"Charger #2, mid-session",
+      roiH:"100 at-risk customers: what does the company gain or lose?",
+      roiIn:{N:"At-risk customers", B:"Average basket", m:"Margin", c0:"Purchase rate without action", u:"Extra effect of the action (uplift)", cp:"Coupon discount", sh:"Expected shield cost (of basket)", s:"Share in the undecided zone", fee:"PoF fee (of extra margin)"},
+      roiCol:["Nothing","Coupon for all","PoF (targeted)"],
+      roiRows:["Buyers","Extra purchases","Extra margin","Action cost","PoF fee","Net effect for the company"],
+      roiBE:"PoF breaks even when the action adds {u} or more.", roiBEno:"With these inputs PoF never breaks even: the shield costs more than the margin.",
+      roiNote:"Every number is an assumption. The coupon gets the same uplift, which favours the coupon. Real uplift will be measured against a control group in the pilot. Move the sliders together with the judges.",
+      ppU:"pp",
+      evH:"The core assumption was tested in a real experiment: the cause-matched action earns, the wrong one does not",
+      evLead:"64,000 customers were randomly split into three groups: men’s catalogue e-mail, women’s catalogue e-mail, nothing. Random assignment lets us measure the true effect of the action directly. The money maths matches the ROI view: 25% margin, 10% coupon for buyers.",
+      evAxis:"Net margin vs no action, per 1,000 customers (95% interval)",
+      evPol:{blanket_wrong:["Wrong action for everyone","women’s catalogue"], blanket_random:["Random action for everyone",""], blanket_best:["Best action for everyone","only known in hindsight"], matched:["Cause-matched action","the only interval above zero"]},
+      evHetH:"Same action (women’s catalogue): purchase probability lift, pp",
+      evHet:{womens_only:"Women’s product buyers", mens_only:"Men’s product buyers"},
+      evConv:"purchases among those treated", evSpend:"spend", evVisit:"site visits",
+      evMeth:"Policy values are unbiased IPW estimates; intervals come from 1,000 bootstrap samples. The matching rule is fixed in advance, not learned from the data. The context is e-mail, not an in-app offer, so the pilot repeats this on our own data.",
+      roiEvidence:"In a real experiment (64,000 customers): wrong action for everyone {w}, cause-matched action {m} per 1,000 customers; the action lifted purchases by {c}.",
+      srcBtn:"Sources", kpiNet:"Net effect this session", kpiNetSub:"{n} accepted actions · cost {c}", privBadge:"Leaves the device: {b} bytes",
+      moneyH:"Money: who pays, what it earns", moneyEmpty:"When an action is shown, its cost, who pays and the expected gain appear here.",
+      mAction:"Action", mPayer:"Who pays", mCost:"Expected cost", mInc:"Expected extra margin (on {v})", mIncLtv:"Expected extra margin (90-day value {v})", mNet:"Expected net",
+      econ2:"Cost {c} → expected net {g}",
+      payer:{price:"The shop, instead of its coupon budget", delivery:"The shop, only if delivery is late", fit:"The shop, only if the item is returned", friction:"The shop, backup channel fee", silentD:"The shop, from its compensation budget", silentR:"The shop, courier cost"},
+      srcH:"Where do the numbers come from?", srcLead:"Every parameter shows its source: learned from data, an industry standard, based on a principle from the literature, or an assumption. All assumptions are measured in the first 30 days of the pilot.",
+      srcCols:["Parameter","Value","Source","Status and how the pilot measures it"], srcLink:"source", srcStatus:{data:"Data", std:"Industry standard", lit:"Principle: literature", hyp:"Assumption", exp:"Experiment"},
+      srcML:["Purchase probability model (11 features)","UCI Online Shoppers: 12,330 real sessions, tested on 2,466 unseen sessions.","Retrained on the shop’s own data in the pilot."],
+      srcRage:["Rage click definition","Contentsquare’s definition: an element is clicked at least 3 times in under 2 seconds.","Fixed."],
+      srcNeg:["Trust: bad events weigh more than good ones","Principle: Baumeister et al., 2001, «Bad Is Stronger Than Good». The numbers themselves are assumptions.","Pilot: 90-day return rate after a delay."],
+      srcPeak:["Peak moment (peak-end)","Principle: Kahneman et al., 1993. The threshold is an assumption.","Pilot: short post-session survey and return data."],
+      srcUplift:["Extra effect of the action (uplift)","Hillstrom experiment: purchases +87% relative (95%: +62% … +111%). Our ROI assumption (15% → 25%) is +67% relative, below what was measured.","Pilot: 10% of customers go to a control group, measured in our own context."],
+      srcShield:["Shield cost: chance of a price drop × average drop","Assumption.","Pilot: computed from the shop’s 90-day price history."],
+      srcThr:["Cause threshold","Assumption.","Pilot: the threshold that maximises uplift on held-out data."],
+      srcHalf:["Signal half-lives","Assumption.","Pilot: survival analysis on session events.","1 / 10 min"],
+      srcMargin:["Margin and 90-day customer value","Assumption.","Pilot: taken from the shop’s financial data."],
+      srcPage:["Page values (product, cart, checkout)","Demo table.","Pilot: from the shop’s analytics (Google Analytics PageValues)."],
+      srcRobust:"The most important assumption is uplift. In the ROI view the break-even point is {be} and our assumption is {u}. So even if uplift turns out {x} times lower than expected, the company does not lose money.",
+      expL:"experimental", memNote:"The numbers in this section are assumptions and are not shown in the pitch. Their sources are in the «Sources» panel.",
+      mPitch:"Pitch", mDetail:"Details", scenL:"Scenario", sc1:"Price", sc2:"Payment", sc3:"Size", sc4:"Delay", profL:"Customer profile",
+      keysHint:"Keys: 1–4 scenario · R reset · P mode · L language",
+      scenTip:["","Tap the price 3 times","Tap «Pay» rapidly","Open the size chart and switch sizes twice","The customer does nothing; the system reacts on its own"],
+      sees:"What the system sees now", kpiOut:"Leaves the device", kpiOutSub:"{n} raw events stayed on the phone", latLabel:"signal to action", noCoupon:"no coupon sent",
+      ppWatch:"Watching the customer", ppWatchSub:"Do something on the phone: the system reads every tap and estimates the cause.",
+      ppNormMain:"Normal behaviour", ppNorm:"Looked at the price {n} times, which is normal for this customer (usual: {b}). No action needed.",
+      memH:"Customer memory", trustL:"Trust (long-term)", peakL:"Worst moment of the session",
+      prof:{regular:"Regular", saver:"Bargain hunter", newbie:"New"},
+      profNote:{regular:"Steady rhythm, high trust.", saver:"Always checks the price: 2–3 looks is normal for them.", newbie:"No trust yet: delivery, size and technical issues hit harder."},
+      halfH:"How long a signal is remembered", half:["Anger (rage click): ~1 min","Doubt (price, size): ~10 min","Broken promise (delay): days"],
+      why:"Why: {r}.", mechL:"Psychological mechanism: {m}",
+      mech:{price:"loss aversion", delivery:"uncertainty avoidance", fit:"fear of regret", friction:"frustration", silent:"broken promise, negativity bias"},
+      ph:{queue_check:"checked the queue {n} times", off_charger:"the charger stopped mid-session", sil_st_wash:"hesitated on the wash page for {n} s", sil_st_market:"did nothing for {n} s", price_tap:"looked at the price {n} times", price_tap_b:"looked at the price {n} times (normal for them: {b})", cart_remove:"removed from cart {n} times", cart_remove_b:"removed from cart {n} times (normal: {b})", off_competitor:"a rival is 8% cheaper", sil_cart:"did nothing in the cart for {n} s", delivery_check:"checked the delivery date {n} times", sil_checkout:"paused at checkout for {n} s", size_chart:"opened the size chart {n} times", size_switch:"switched size {n} times", reviews_s:"read reviews for {n} s", sil_product:"hesitated on the product for {n} s", rage_click:"tapped the same button in anger ({n})", dead_click:"tapped a dead spot {n} times", form_error:"payment failed {n} times", off_delay:"last order is 3 days late", off_return:"opened a return request", trust:"trust is low ({v})", stack:"{n} concerns are stacking up"},
+      skipFatigueMain:"No action: offer fatigue", skipFatigueSub:"{n} offers were already shown this session. More would tire the customer and erode trust.",
+      bumpNote:"The customer said no: this cause now needs {v}, so the system does not push.", silence:"Hesitation: {n} s of silence",
+      offer:{
+        queue:{k:"Guaranteed slot", t:"The {d} slot is yours", b:"We guarantee this time. If you wait more than 10 minutes, the wash is free.", c:"Confirm slot"},
+        silentEV:{k:"No need to worry", t:"Let’s finish charging elsewhere", b:"Charger #2 stopped. A free bay 1.2 km away, at the Nobel Avenue station, is held for you for 20 minutes. We added 5 ₼ to your balance.", c:"Open route"},
+        price:{k:"Price shield", t:"This price is yours for 30 days", b:"The price of {p} is protected for 30 days. If it drops in that time, the difference goes back to your balance.", c:"Activate shield"},
+        delivery:{k:"Guaranteed delivery", t:"Delivery: {d}", b:"We guarantee this date. If we are late, delivery is free and 5 ₼ goes to your balance.", c:"Accept guarantee"},
+        fit:{k:"Size assistant", t:"Size {s} fits you", b:"Based on the size chart and buyer reviews, we recommend {s}. If it does not fit, returns are free.", c:"Choose size {s}"},
+        friction:{k:"Payment issue", t:"Finish payment with one tap?", b:"We detected a delay in the payment service. We can charge your saved Visa •••• 4417 through a backup channel.", c:"Pay with one tap"},
+        silentD:{k:"We are sorry", t:"Your order is late", b:"Your last order is 3 days late. The courier will deliver it today by 18:00. We added 5 ₼ to your balance for the trouble.", c:"Thanks"},
+        silentR:{k:"Return", t:"We will handle your return", b:"A courier will pick up the item tomorrow between 10:00 and 14:00. The refund reaches your card within 24 hours.", c:"Sounds good"}
+      }
+    }
+  };
+  var LANG = 'az';
+  try { var saved = localStorage.getItem('pof-lang'); if (saved && I18N[saved]) LANG = saved; } catch(e){}
+  function look(obj, key){ var parts=key.split('.'), o=obj; for (var i=0;i<parts.length;i++){ if (o==null) return null; o=o[parts[i]]; } return o; }
+  function t(key, p){
+    var s=look(I18N[LANG], key); if (s==null) s=look(I18N.az, key); if (s==null) return key;
+    if (typeof s==='string' && p) s=s.replace(/\{(\w+)\}/g, function(m,k){ return p[k]!=null ? p[k] : m; });
+    return s;
+  }
+
+  /* ================= data ================= */
+  var COL = {price:'#ff5f6d', delivery:'#2f8cff', fit:'#7b5cff', friction:'#ffb02e', silent:'#1fc8a0'};
+  var SVG = {
+    heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+    heartOn:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+    truck:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 6h11v10H3zM14 9h4l3 3v4h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>',
+    ret:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h11a5 5 0 0 1 0 10H9"/><path d="M8 5L4 9l4 4"/></svg>',
+    star:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>',
+    home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>',
+    search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>',
+    cart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 4h2.5l2.2 11h10.6L20 7H7"/><circle cx="9.5" cy="19.5" r="1.4"/><circle cx="17" cy="19.5" r="1.4"/></svg>',
+    user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20c1.3-3.6 4.2-5.4 7.5-5.4s6.2 1.8 7.5 5.4"/></svg>',
+    bolt:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>',
+    shirt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M9 4L4 7l2 4 2-1v10h8V10l2 1 2-4-5-3c-.6 1.3-1.8 2-3 2s-2.4-.7-3-2z"/></svg>',
+    sofa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 11V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><path d="M3 12a2 2 0 0 1 4 0v2h10v-2a2 2 0 0 1 4 0v5H3z"/><path d="M5 17v2M19 17v2"/></svg>',
+    ball:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17M6 6c3 3 3 9 0 12M18 6c-3 3-3 9 0 12"/></svg>',
+    gem:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 4h12l3 5-9 11L3 9z"/><path d="M3 9h18M9 4l3 16 3-16"/></svg>',
+    shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.7-7 9-4-1.3-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+    ruler:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 15L15 3l6 6L9 21z"/><path d="M7 11l2 2M10 8l2 2M13 5l2 2"/></svg>',
+    card:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>',
+    clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+    drop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z"/></svg>',
+    cup:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 10h1.5a2.5 2.5 0 0 1 0 5H16M8 3v3M11 3v3"/></svg>',
+    heal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></svg>'
+  };
+  var CAT_ICONS=[['bolt','#2f8cff'],['shirt','#ff5f6d'],['sofa','#1fc8a0'],['ball','#ffb02e'],['gem','#7b5cff']];
+  var PRODUCTS = [
+    {id:'p1', img:'img/headphones.jpg', price:89.90, old:119.00, watchers:37, sold:214, seller:'soundhub', pos:'99.1', sales:'2.4k', pts:[92.4,90,88,86,84.9,88,90,89.9], ship:true,
+      name:{az:'Simsiz qulaqlıq, səs-küy izolyasiyalı', tr:'Kablosuz kulaklık, gürültü engelleme', en:'Wireless noise-cancelling headphones'}, rating:4.6, reviews:124,
+      revs:{az:[['Leyla','Səs yaxşıdır, batareya 2 gün çəkir.'],['Nigar','Bir saatdan sonra qulaqları sıxır.']], tr:[['Elif','Ses çok iyi, pil 2 gün gidiyor.'],['Burak','Bir saat sonra kulakları sıkıyor.']], en:[['Leyla','Great sound, battery lasts 2 days.'],['Mark','Gets tight on the ears after an hour.']]}},
+    {id:'p2', img:'img/watch.jpg', price:79.00, bid:64.00, bids:12, left:{az:'1g 6s', tr:'1g 6sa', en:'1d 6h'}, watchers:52, sold:0, seller:'gizmo.az', pos:'98.7', sales:'860', pts:[84,82,80,79,78,79,80,79], ship:true,
+      name:{az:'Ağıllı saat, ağ silikon kəmər', tr:'Akıllı saat, beyaz silikon kordon', en:'Smartwatch, white silicone strap'}, rating:4.2, reviews:58,
+      revs:{az:[['Rauf','Nəbz ölçümü dəqiqdir.'],['Aytən','Ekran günəşdə zəif görünür.']], tr:[['Can','Nabız ölçümü isabetli.'],['Zeynep','Ekran güneşte zor okunuyor.']], en:[['Rauf','Heart-rate tracking is accurate.'],['Emma','Screen is hard to read in sunlight.']]}},
+    {id:'p3', img:'img/shirt.jpg', price:39.90, old:49.90, watchers:21, sold:96, seller:'linen.lab', pos:'97.9', sales:'1.1k', pts:[44.9,42,39,34.9,38,41,40,39.9], ship:false,
+      name:{az:'Cins köynək, uzunqol', tr:'Kot gömlek, uzun kollu', en:'Denim shirt, long sleeve'}, rating:4.1, reviews:86,
+      sizes:['S','M','L','XL'], rec:'M',
+      chartHead:{az:['Ölçü','Sinə','Uzunluq'], tr:['Beden','Göğüs','Boy'], en:['Size','Chest','Length']},
+      chart:[['S','92','70'],['M','100','72'],['L','108','74'],['XL','116','76']], unit:{az:'sm', tr:'cm', en:'cm'},
+      revs:{az:[['Səbinə','Bir ölçü kiçik gəlir, böyüyünü götürün.'],['Elvin','Yuyulandan sonra az qısalır.']], tr:[['Selin','Bir beden küçük, büyüğünü alın.'],['Emre','Yıkamadan sonra biraz çekiyor.']], en:[['Sabina','Runs one size small, size up.'],['Tom','Shrinks a little after washing.']]}},
+    {id:'p4', img:'img/shoes.jpg', price:119.00, watchers:44, sold:73, seller:'stepcraft', pos:'99.4', sales:'3.0k', pts:[129,125,119,115,109,114,119,119], ship:true,
+      name:{az:'Zamşa ayaqqabı, zümrüd yaşılı', tr:'Süet ayakkabı, zümrüt yeşili', en:'Suede brogues, emerald green'}, rating:4.7, reviews:212,
+      sizes:['40','41','42','43','44'], rec:'42',
+      chartHead:{az:['Ölçü','Pəncə uzunluğu'], tr:['Numara','Ayak uzunluğu'], en:['Size','Foot length']},
+      chart:[['40','25,5'],['41','26,0'],['42','26,5'],['43','27,5'],['44','28,0']], unit:{az:'sm', tr:'cm', en:'cm'},
+      revs:{az:[['Tural','Ölçüsü tam uyğundur.'],['Kamran','İlk həftə bir az sərt idi.']], tr:[['Mert','Numarası tam oldu.'],['Ayşe','İlk hafta biraz sertti.']], en:[['Tural','True to size.'],['Sam','A bit stiff the first week.']]}},
+    {id:'p5', img:'img/backpack.jpg', price:54.90, old:64.90, watchers:58, sold:301, seller:'urbanpack', pos:'98.9', sales:'5.2k', pts:[64.9,62,59,56,54.9,57,55,54.9], ship:true,
+      name:{az:'Şəhər bel çantası, 22 L', tr:'Şehir sırt çantası, 22 L', en:'City backpack, 22 L'}, rating:4.5, reviews:167,
+      revs:{az:[['Fərid','Noutbuk bölməsi rahatdır.'],['Lalə','Yağışda içi quru qaldı.']], tr:[['Kaan','Laptop bölmesi çok kullanışlı.'],['Deniz','Yağmurda içi kuru kaldı.']], en:[['Farid','Laptop sleeve is handy.'],['Lily','Stayed dry in the rain.']]}},
+    {id:'p6', img:'img/bottle.jpg', price:24.50, watchers:12, sold:540, seller:'hydro.az', pos:'99.6', sales:'8.7k', pts:[23,23,22.9,24,24.5,24.9,24.5,24.5], ship:false,
+      name:{az:'Termos butulka, 750 ml', tr:'Termos şişe, 750 ml', en:'Insulated bottle, 750 ml'}, rating:4.8, reviews:340,
+      revs:{az:[['Orxan','İsti 12 saat saxlayır.'],['Günay','Qapağı axıtmır.']], tr:[['Ozan','Sıcağı 12 saat tutuyor.'],['Ece','Kapağı sızdırmıyor.']], en:[['Orkhan','Keeps drinks hot for 12 hours.'],['Grace','Lid does not leak.']]}}
+  ];
+
+  /* ================= model ================= */
+  var CAUSES = [
+    {k:'price', b:-2.6, terms:[['price_tap',1.15],['cart_remove',1.1],['off_competitor',2.2],['sil_cart',1],['sil_st_market',1]]},
+    {k:'delivery', b:-2.6, terms:[['delivery_check',1.15],['queue_check',1.15],['sil_checkout',1],['sil_st_wash',1]]},
+    {k:'fit', b:-2.5, terms:[['size_chart',1.1],['size_switch',1.0],['reviews_s',0.12],['sil_product',1]]},
+    {k:'friction', b:-2.8, terms:[['rage_click',2.0],['dead_click',0.8],['form_error',1.4]]},
+    {k:'silent', b:-3.0, terms:[['off_delay',3.6],['off_return',3.6],['off_charger',3.6]]}
+  ];
+  /* Hər profil eyni davranışı fərqli şərh edir: şəxsi norma (base), həssaslıq (mult) və başlanğıc etibar */
+  var PROFILES = {
+    regular:{trust:0.82, base:{}, mult:{}, w:{}},
+    saver:{trust:0.75, base:{price_tap:2, cart_remove:1}, mult:{}, w:{off_competitor:1.5}},
+    newbie:{trust:0.55, base:{}, mult:{delivery:1.3, fit:1.3, friction:1.25}, w:{}}
+  };
+  /* Yarımömür: əsəb tez sönür, şübhə qalır, pozulmuş vəd sessiya ərzində sönmür */
+  var HALF = {rage_click:60e3, dead_click:90e3, form_error:180e3, back_nav:300e3,
+    price_tap:480e3, cart_remove:600e3, size_chart:600e3, size_switch:600e3, reviews_read:600e3, delivery_check:900e3, off_competitor:1800e3,
+    cart_add:900e3, view_product:600e3, view_checkout:600e3, size_select:900e3, watch_add:3600e3,
+    queue_check:900e3, off_delay:Infinity, off_return:Infinity, off_charger:Infinity};
+  /* Səssizlik: qərar ekranlarında hərəkətsizlik riski artırır */
+  var SIL = {cart:{k:'price', coef:0.28}, product:{k:'fit', coef:0.15}, checkout:{k:'delivery', coef:0.2}, st_wash:{k:'delivery', coef:0.2}, st_market:{k:'price', coef:0.28}};
+  /* Etibar: mənfi hadisələr müsbətlərdən ağır gəlir; yaxşı bərpa yaranı qismən sağaldır */
+  var TRUST_D = {rage_click:-0.03, form_error:-0.04, dead_click:-0.01, off_delay:-0.22, off_return:-0.10, off_charger:-0.18, offer_decline:-0.01};
+  var TRUST_REF = 0.82, MAX_OFFERS = 3;
+  /* Real vaxt düzəlişi: ML modelinin görmədiyi sessiya siqnalları (logit üzərində) */
+  function adjZ(f){ return 0.3*g(f,'cart_add') - 0.8*g(f,'cart_remove') + 0.3*g(f,'size_select') + 0.4*g(f,'watch_add') - 0.6*g(f,'back_nav') - 0.5*g(f,'off_competitor') - 0.04*(f._sil||0); }
+  var ZONE_LO = 0.05, ZONE_HI = 0.60;
+  /* ================= ML: real data üzərində öyrədilmiş alış niyyəti modeli =================
+     Logistic regression, UCI "Online Shoppers Purchasing Intention" (12 330 real sessiya), 80/20 bölgü.
+     Görülməmiş 2 466 sessiyada AUC 0.889 (gradient boosting: 0.903). Çəkilər xam xüsusiyyətlər üzərindədir. */
+  var ML = {cols:["admin_n","admin_s","info_n","info_s","prod_n","prod_s","new_visitor","weekend","bounce","exit","pagevalue"],
+    w:[-0.1498,-0.01746,0.35021,-0.07025,0.26785,-0.02059,0.78399,0.20783,-8.28823,-5.66573,1.08966], b:-3.45854,
+    m:{n:12330, test:2466, auc:0.889, gbm:0.903, top10:70, base:15.5, brier:0.080, brierBase:0.131, sdkOnly:0.718}};
+  /* Səhifə dəyərləri: merchant analitikasından gələn aqreqat cədvəl (şəxsi data deyil) */
+  var PAGE = {home:{v:0,b:.01,e:.025,t:'home'}, product:{v:8,b:.02,e:.04,t:'prod'}, cart:{v:25,b:.01,e:.06,t:'admin'}, checkout:{v:40,b:.005,e:.05,t:'admin'}, done:{v:40,b:.005,e:.05,t:'admin'},
+    st_home:{v:0,b:.01,e:.025,t:'home'}, st_wash:{v:10,b:.02,e:.04,t:'prod'}, st_ev:{v:10,b:.02,e:.04,t:'prod'}, st_market:{v:8,b:.02,e:.04,t:'prod'}, st_pump:{v:40,b:.005,e:.05,t:'admin'}, st_done:{v:40,b:.005,e:.05,t:'admin'}};
+  var INFO_EV = {price_tap:1, delivery_check:1, queue_check:1, size_chart:1};
+  function mlVec(now){
+    var c={admin:0,prod:0,info:0}, d={admin:S.dur.admin, prod:S.dur.prod, info:0};
+    S.visits.forEach(function(v){ var tp=PAGE[v].t; if (tp!=='home') c[tp]++; });
+    var cur=PAGE[S.screen]; if (cur && cur.t!=='home') d[cur.t]+=(now-S.enteredAt)/1000;
+    S.events.forEach(function(e){ if (INFO_EV[e.type]){ c.info++; d.info+=5; } if (e.type==='reviews_read'){ c.info++; d.info+=(e.ms||0)/1000; } });
+    if (S.reviewsOpen){ c.info++; d.info+=(now-S.reviewsAt)/1000; }
+    var pv=0, bb=0, ee=0, nv=Math.max(1,S.visits.length);
+    S.visits.forEach(function(v){ pv+=PAGE[v].v; bb+=PAGE[v].b; ee+=PAGE[v].e; });
+    var wd=new Date().getDay();
+    return [Math.log1p(c.admin), Math.log1p(d.admin), Math.log1p(c.info), Math.log1p(d.info), Math.log1p(c.prod), Math.log1p(d.prod),
+      S.profile==='newbie' ? 1 : 0, (wd===0||wd===6) ? 1 : 0, bb/nv, ee/nv, Math.log1p(pv/nv)];
+  }
+  function mlProb(now){ var x=mlVec(now), z=ML.b; for (var i=0;i<x.length;i++) z+=ML.w[i]*x[i]; return sig(z); }
+  function logit(p){ p=Math.min(0.999,Math.max(0.001,p)); return Math.log(p/(1-p)); }
+  /* Tədbirlərin gözlənilən xərci: fərziyyələr, pilotda ölçüləcək */
+  var ASSUME={uplift:0.10, margin:0.25, ltv:240, pDrop:0.30, avgDrop:0.05, pLate:0.10, lateCost:8, pRet:0.25, retCost:4, payFee:0.012, credit:5, pickup:3, pMiss:0.10};
+  function offerGain(o){ var base = o.value ? o.value : ASSUME.ltv; return ASSUME.uplift*base*ASSUME.margin - (o.cost||0); }
+  function offerCost(o){
+    var v=o.value||0;
+    switch(o.variant){
+      case 'price': return ASSUME.pDrop*ASSUME.avgDrop*v;
+      case 'delivery': return ASSUME.pLate*ASSUME.lateCost;
+      case 'queue': return ASSUME.pMiss*v;
+      case 'fit': return ASSUME.pRet*ASSUME.retCost;
+      case 'friction': return ASSUME.payFee*v;
+      case 'silentR': return ASSUME.pickup;
+      default: return ASSUME.credit;
+    }
+  }
+  var CAUSE_OF={price_tap:'price', cart_remove:'price', off_competitor:'price', delivery_check:'delivery', size_chart:'fit', size_switch:'fit', reviews_read:'fit', rage_click:'friction', dead_click:'friction', form_error:'friction', off_delay:'silent', off_return:'silent', queue_check:'delivery', off_charger:'silent'};
+
+  function g(f,k){ return f[k] || 0; }
+  function sig(z){ return 1/(1+Math.exp(-z)); }
+  function fmt(x){ return x.toFixed(2); }
+  function money(v){ var s=v.toFixed(2); return (LANG==='en' ? s : s.replace('.', ',')) + ' ₼'; }
+  function $(id){ return document.getElementById(id); }
+  function prod(id){ var all=PRODUCTS.concat(ST_ITEMS); for (var i=0;i<all.length;i++) if (all[i].id===id) return all[i]; return null; }
+  var APP='shop';
+  /* Demo yalnız mağaza ssenarisi ilə işləyir */
+  function causeName(k){ return (APP==='station' && k==='delivery') ? t('causeSt.delivery') : t('cause.'+k); }
+  var ST_ITEMS = [
+    {id:'m1', img:'img/coffee.jpg', price:3.50, pts:[3.2,3.2,3.3,3.4,3.5,3.5,3.5,3.5], name:{az:'Kapuçino, 0.3 L', tr:'Kapuçino, 0.3 L', en:'Cappuccino, 0.3 L'}},
+    {id:'m2', img:'img/croissant.jpg', price:2.20, pts:[2,2,2.1,2.1,2.2,2.2,2.2,2.2], name:{az:'Kərə yağlı kruassan', tr:'Tereyağlı kruvasan', en:'Butter croissant'}},
+    {id:'m3', img:'img/croissant.jpg', price:4.90, old:5.70, pts:[5.7,5.5,5.2,4.9,5.1,4.9,4.9,4.9], name:{az:'Səhər kombosu: kapuçino + kruassan', tr:'Sabah menüsü: kapuçino + kruvasan', en:'Morning combo: cappuccino + croissant'}},
+    {id:'w1', price:8, name:{az:'Ekspres yuma', tr:'Ekspres yıkama', en:'Express wash'}},
+    {id:'w2', price:15, name:{az:'Tam yuma', tr:'Komple yıkama', en:'Full wash'}}
+  ];
+  function pname(p){ return p.name[LANG]; }
+  function addDays(n){ var d=new Date(); d.setDate(d.getDate()+n); return d; }
+  function dayStr(d){ var m=t('months')[d.getMonth()]; return LANG==='en' ? m+' '+d.getDate() : d.getDate()+' '+m; }
+  function deliveryRange(){
+    var a=addDays(3), b=addDays(5), M=t('months');
+    if (a.getMonth()!==b.getMonth()) return dayStr(a)+' – '+dayStr(b);
+    return LANG==='en' ? M[a.getMonth()]+' '+a.getDate()+'–'+b.getDate() : a.getDate()+'–'+b.getDate()+' '+M[b.getMonth()];
+  }
+  function guaranteedDay(){ return dayStr(addDays(4)); }
+  function delivText(){ return S.guaranteed ? t('guaranteed',{d:guaranteedDay()}) : deliveryRange(); }
+
+  var app=$('app'), phone=$('phone'), sheet=$('sheet'), tabbar=$('tabbar');
+  var S;
+  function fresh(profile){
+    var now=performance.now(), pk=PROFILES[profile] ? profile : 'regular';
+    var sc0 = APP==='station' ? 'st_home' : 'home';
+    return {visits:[sc0], dur:{admin:0, prod:0}, st:{pkg:'w2', slot:null, queueOpen:false, pump:null, fuel:0, amt:40, evDown:false, evPct:34, slotOK:false},
+      scen:0, profile:pk, trust:PROFILES[pk].trust, trustLast:null, peak:0, bump:{}, silLogged:false,
+      screen:sc0, pid:null, sizes:{}, cart:[], watch:{}, events:[], stream:[], sheetOpen:false, cooldown:{}, resolved:{},
+      stats:{shown:0, accepted:0, declined:0, saved:0, cost:0, net:0}, lastAt:now, enteredAt:now, addedHere:false,
+      reviewsOpen:false, reviewsAt:0, histOpen:false, chartOpen:false, delivOpen:false,
+      payState:'idle', payTries:0, payFixed:false, shield:{}, guaranteed:false,
+      decision:{state:'watch'}, payload:null, clicks:{}, rageUntil:{}, t0:now, current:null, last:null, toast:null};
+  }
+  function setTrust(d, type){ S.trust=Math.max(0.05, Math.min(0.98, S.trust+d)); S.trustLast={d:d, type:type}; }
+
+  /* ================= SDK: event capture ================= */
+  function track(type, detail, extra){
+    var tm=performance.now();
+    var e={type:type, detail:detail||null, t:tm};
+    if (extra) for (var k in extra) e[k]=extra[k];
+    S.events.push(e);
+    S.lastAt=tm; S.silLogged=false;
+    if (TRUST_D[type]) setTrust(TRUST_D[type], type);
+    pushStream(function(){ return t('ev.'+type); }, detail, tm, type.indexOf('off_')===0 ? 'ext' : '', type);
+    evaluate(tm, tm);
+  }
+  function pushStream(labelFn, detail, tm, cls, type){
+    S.stream.unshift({label:labelFn, detail:detail, t:tm, cls:cls||'', type:type||null});
+    if (S.stream.length>40) S.stream.length=40;
+    renderStream(true);
+  }
+  function detailText(d){ return d==null ? '' : (typeof d==='function' ? d() : String(d)); }
+  function silSecs(now){ if (S.sheetOpen || !SIL[S.screen]) return 0; return Math.max(0,(now-S.lastAt)/1000); }
+  function feats(now){
+    var f={};
+    for (var i=0;i<S.events.length;i++){
+      var e=S.events[i], ck=CAUSE_OF[e.type];
+      if (ck && S.resolved[ck] && e.t<=S.resolved[ck]) continue;
+      var h=HALF[e.type]||300000, w = h===Infinity ? 1 : Math.pow(0.5,(now-e.t)/h);
+      if (e.type==='reviews_read'){ f.reviews_s=(f.reviews_s||0)+w*(e.ms||0)/1000; continue; }
+      f[e.type]=(f[e.type]||0)+w;
+    }
+    if (S.reviewsOpen) f.reviews_s=(f.reviews_s||0)+(now-S.reviewsAt)/1000;
+    var ss=silSecs(now), sl=SIL[S.screen];
+    f._sil=ss;
+    if (sl && ss>4) f['sil_'+S.screen]=Math.min((ss-4)*sl.coef, 4);
+    return f;
+  }
+  function cnt(type, now){ var n=0, ck=CAUSE_OF[type]; S.events.forEach(function(e){ if (e.type===type && now-e.t<600000 && !(ck && S.resolved[ck] && e.t<=S.resolved[ck])) n++; }); return n; }
+  function prof(){ return PROFILES[S.profile]; }
+  function termVal(c, key, f){ var P=prof(); return (P.mult[c.k]||1)*(P.w[key]||1)*Math.max(0, g(f,key)-(P.base[key]||0)); }
+  function scoreAll(f){
+    var sc=CAUSES.map(function(c){
+      var z=c.b + 1.8*(TRUST_REF - S.trust);
+      c.terms.forEach(function(tm){ z+=tm[1]*termVal(c, tm[0], f); });
+      return {k:c.k, c:c, z:z, b:sig(c.b)};
+    });
+    sc.forEach(function(x){ x.s=sig(x.z); });
+    /* Yığılma ("son damla"): eyni anda 2+ narahatlıq bir-birini gücləndirir */
+    var active=sc.filter(function(x){ return x.s>=0.35; });
+    if (active.length>=2) active.forEach(function(x){ x.z+=0.5*(active.length-1); x.s=sig(x.z); x.stacked=active.length; });
+    return sc;
+  }
+  function reasons(x, f, now){
+    var P=prof(), out=[];
+    x.c.terms.forEach(function(tm){
+      var key=tm[0], contrib=tm[1]*termVal(x.c, key, f);
+      if (contrib<0.3) return;
+      var n = key.indexOf('sil_')===0 ? Math.round(f._sil) : key==='reviews_s' ? Math.round(g(f,'reviews_s')) : cnt(key, now);
+      var b=P.base[key];
+      out.push({c:contrib, fn: (b ? function(){ return t('ph.'+key+'_b',{n:n,b:b}); } : function(){ return t('ph.'+key,{n:n}); })});
+    });
+    out.sort(function(a,b){ return b.c-a.c; });
+    var r=out.slice(0,3).map(function(o){ return o.fn; });
+    var tr=S.trust, st=x.stacked;
+    var extra=[];
+    if (tr<0.7) extra.push(function(){ return t('ph.trust',{v:fmt(tr)}); });
+    if (st) extra.push(function(){ return t('ph.stack',{n:st}); });
+    return function(){ return r.concat(MODE==='pitch' ? [] : extra).map(function(fn){ return fn(); }).join(', '); };
+  }
+  function thr(k){ return THR + (S.bump[k]||0); }
+
+  /* ================= brain: cause, risk, uplift ================= */
+  function evaluate(now, trigger){
+    var f=feats(now);
+    var sc=scoreAll(f);
+    var pml=mlProb(now), adj=adjZ(f), intent=sig(logit(pml)+adj);
+    var keep=1;
+    sc.forEach(function(c){ var r=Math.max(0,(c.s-c.b)/(1-c.b)); keep*=1-r; });
+    var risk=1-keep;
+    S.peak=Math.max(S.peak, risk);
+    S.last={sc:sc, intent:intent, risk:risk, ml:pml, adj:adj};
+    renderBrain();
+    if (!trigger || S.sheetOpen) return;
+    var cand=null;
+    sc.forEach(function(c){ if (c.s>=thr(c.k) && !(S.cooldown[c.k]>now) && (!cand || c.s>cand.s)) cand=c; });
+    if (!cand) return;
+    if ((S.screen==='done' || S.screen==='st_done') && cand.k!=='silent') return;
+    var bypass = cand.k==='friction' || cand.k==='silent';
+    var rfn=reasons(cand, f, now);
+    var skip = !bypass && S.stats.shown>=MAX_OFFERS ? 'fatigue' : (!bypass && intent>ZONE_HI ? 'intent' : null);
+    if (skip){
+      S.cooldown[cand.k]=now+30000;
+      S.decision={state:'skip', why:skip, cause:cand, intent:intent, reasons:rfn, n:S.stats.shown};
+      renderBrain();
+      pushStream(function(){ return t('decSkip'); }, function(){ return causeName(cand.k); }, now, 'dec');
+      return;
+    }
+    intervene(cand, intent, now, trigger, rfn);
+  }
+
+  var OFFER_ICON={price:'shield', delivery:'truck', fit:'ruler', friction:'card', silent:'heal'};
+  function offerIcon(k){ return (APP==='station' && k==='delivery') ? 'clock' : OFFER_ICON[k]; }
+  function makeOffer(k){
+    if (k==='price'){
+      var p=prod(S.pid) || (S.cart[0] && prod(S.cart[0].id)) || PRODUCTS[0];
+      return {variant:'price', action:'price_shield', value:p.price, params:function(){ return {p:pname(p)}; }, onAccept:function(){ S.shield[p.id]=true; }};
+    }
+    if (k==='delivery' && APP==='station'){
+      var wp=prod(S.st.pkg); return {variant:'queue', action:'slot_guarantee', value:wp.price, params:function(){ return {d:S.st.slot||'14:20'}; }, onAccept:function(){ S.st.slotOK=true; if (!S.st.slot) S.st.slot='14:20'; }};
+    }
+    if (k==='delivery') return {variant:'delivery', action:'delivery_guarantee', value:cartValue() || (prod(S.pid)||PRODUCTS[0]).price, params:function(){ return {d:guaranteedDay()}; }, onAccept:function(){ S.guaranteed=true; }};
+    if (k==='fit'){
+      var q=prod(S.pid); if (!q || !q.sizes) q=PRODUCTS[2];
+      return {variant:'fit', action:'fit_assist', value:q.price, params:function(){ return {s:q.rec}; }, onAccept:function(){ S.sizes[q.id]=q.rec; }};
+    }
+    if (k==='friction') return {variant:'friction', action:'one_tap_pay', value:cartValue(), params:function(){ return {}; }, onAccept:function(){
+      S.payFixed=true; finishOrder(); pushStream(function(){ return t('ticket'); }, function(){ return t('ticketD'); }, performance.now(), 'dec'); }};
+    var f=feats(performance.now());
+    if (g(f,'off_charger')>0 && g(f,'off_charger')>=g(f,'off_delay')) return {variant:'silentEV', action:'reroute_charger', value:0, params:function(){ return {}; }, onAccept:function(){}};
+    var ret=g(f,'off_return')>g(f,'off_delay');
+    return {variant: ret ? 'silentR' : 'silentD', action: ret ? 'proactive_return' : 'proactive_recovery', value:0, params:function(){ return {}; }, onAccept:function(){}};
+  }
+  function sheetHTML(){
+    var c=S.current, o=c.offer, P=o.params(), base='offer.'+o.variant+'.';
+    return '<div class="sheet-card" role="dialog" aria-modal="true" aria-labelledby="sh-t">'+
+      '<div class="grab"></div>'+
+      '<div class="sh-icon" style="background:'+COL[c.c.k]+'">'+SVG[offerIcon(c.c.k)]+'</div>'+
+      '<div class="kicker" style="color:'+COL[c.c.k]+'">'+t(base+'k',P)+'</div>'+
+      '<h3 id="sh-t">'+t(base+'t',P)+'</h3><p>'+t(base+'b',P)+'</p>'+
+      '<button class="btn-primary" type="button" data-act="accept">'+t(base+'c',P)+'</button>'+
+      '<button class="btn-ghost" type="button" data-act="decline">'+t('no')+'</button></div>';
+  }
+  function intervene(c, intent, now, tEvent, rfn){
+    var offer=makeOffer(c.k);
+    offer.cost=offerCost(offer);
+    offer.gain=offerGain(offer);
+    S.cooldown[c.k]=now+30000;
+    S.sheetOpen=true;
+    S.stats.shown++;
+    S.current={c:c, offer:offer};
+    sheet.innerHTML=sheetHTML();
+    sheet.hidden=false;
+    requestAnimationFrame(function(){
+      sheet.classList.add('open');
+      S.decision={state:'act', cause:c, intent:intent, offer:offer, lat:performance.now()-tEvent, reasons:rfn};
+      renderBrain();
+      var btn=sheet.querySelector('.btn-primary'); if (btn) btn.focus({preventScroll:true});
+    });
+    pushStream(function(){ return t('decStream',{k:t('offer.'+offer.variant+'.k')}); }, function(){ return causeName(c.k)+' '+fmt(c.s); }, now, 'dec');
+    buildPayload(c, intent, offer.action);
+  }
+  function closeSheet(){
+    sheet.classList.remove('open');
+    S.sheetOpen=false;
+    setTimeout(function(){ if (!S.sheetOpen){ sheet.hidden=true; sheet.innerHTML=''; } }, 240);
+  }
+
+  function hex(buf){ var a=new Uint8Array(buf), s=''; for (var i=0;i<a.length;i++) s+=('0'+a[i].toString(16)).slice(-2); return s; }
+  function fallbackHash(str){ var h=2166136261; for (var i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,16777619); } return ('00000000'+(h>>>0).toString(16)).slice(-8); }
+  function buildPayload(c, intent, action){
+    var raw=JSON.stringify(S.events.map(function(e){ return [e.type, Math.round(e.t)]; }));
+    var nonce=Math.random().toString(36).slice(2,10);
+    function fin(h){
+      S.payload={sdk:'pof-sdk 0.4', cause:c.k, score:+fmt(c.s), intent:+fmt(intent), action:action, commit:h.slice(0,16)};
+      renderPayload();
+    }
+    try { crypto.subtle.digest('SHA-256', new TextEncoder().encode(raw+nonce)).then(function(b){ fin(hex(b)); }, function(){ fin(fallbackHash(raw+nonce)); }); }
+    catch(err){ fin(fallbackHash(raw+nonce)); }
+  }
+  function renderPayload(){
+    if (!S.payload){ $('payload').textContent=t('noPayload'); $('out-b').textContent='0 B'; return; }
+    $('payload').textContent=JSON.stringify(S.payload, null, 2);
+    $('out-b').textContent=new Blob([JSON.stringify(S.payload)]).size+' B';
+    renderPitch();
+  }
+
+  /* ================= store screens ================= */
+  function cartValue(){
+    if (APP==='station'){ if (S.screen==='st_wash') return prod(S.st.pkg).price; if (S.screen==='st_market') return prod(S.pid||'m3').price; return S.st.amt; }
+    var s=0; S.cart.forEach(function(it){ s+=prod(it.id).price; }); return s;
+  }
+  function pct(p){ return p.old ? Math.round((1-p.price/p.old)*100) : 0; }
+  function top(back){
+    return '<div class="shop-top"><div class="shop-row">'+(back ? '<button class="icon-btn" type="button" data-act="back" aria-label="'+t('back')+'">‹</button>' : '')+
+      '<span class="logo"><span class="tag"></span><span>demo<i>shop</i></span></span>'+
+      '<button class="icon-btn cartbtn" type="button" data-act="cart" aria-label="'+t('cartH')+'">'+SVG.cart+(S.cart.length ? '<b class="cnt">'+S.cart.length+'</b>' : '')+'</button></div>'+
+      (back ? '' : '<div class="searchbar" data-dead="search" data-k="search"><span>'+t('search')+'</span><b>'+t('searchBtn')+'</b></div>')+'</div>';
+  }
+  function heart(p){ return '<span class="heart'+(S.watch[p.id]?' on':'')+'" data-act="watch" data-pid="'+p.id+'" role="button" aria-label="'+t('watch')+'">'+(S.watch[p.id]?SVG.heartOn:SVG.heart)+'</span>'; }
+  function cardHTML(p){
+    var meta = p.bid ? '<span class="c-bid">'+t('bids',{n:p.bids,t:p.left[LANG]})+'</span>' : '<span class="c-meta">'+t('watchers',{n:p.watchers})+(p.sold ? ' · '+t('sold',{n:p.sold}) : '')+'</span>';
+    return '<div class="card"><div class="ph"><button type="button" data-act="open" data-pid="'+p.id+'" style="border:0;padding:0;background:none;width:100%;height:100%" aria-label="'+pname(p)+'"><img src="'+p.img+'" alt="'+pname(p)+'"></button>'+
+      (p.bid ? '<span class="auc">'+t('auction')+'</span>' : (p.old ? '<span class="off">−'+pct(p)+'%</span>' : ''))+heart(p)+'</div>'+
+      '<button type="button" data-act="open" data-pid="'+p.id+'" style="border:0;padding:0;background:none;text-align:left;display:flex;flex-direction:column;gap:2px;color:inherit">'+
+      '<span class="c-name">'+pname(p)+'</span><span class="c-cond">'+t('cond')+' · ★ '+p.rating+'</span>'+
+      '<span class="c-price">'+money(p.bid || p.price)+(p.old ? '<s>'+money(p.old)+'</s>' : '')+'</span>'+
+      (p.ship ? '<span class="c-ship">'+t('freeShip')+'</span>' : '')+meta+'</button></div>';
+  }
+  function home(){
+    var cats=t('cats');
+    var h=top(false)+'<div class="cats">'+cats.map(function(c,i){ return '<div class="cat" data-dead="category" data-k="cat-'+i+'"><i style="--cc:'+CAT_ICONS[i][1]+'">'+SVG[CAT_ICONS[i][0]]+'</i>'+c+'</div>'; }).join('')+'</div>'+
+      '<div class="promo"><b>'+t('promoH')+'</b><span>'+t('promoS')+'</span></div>'+
+      '<div class="sec-h">'+t('dealsH')+'<small>'+t('seeAll')+'</small></div><div class="deals">'+
+      ['p1','p3','p5'].map(function(id){ var p=prod(id); return '<button class="deal" type="button" data-act="open" data-pid="'+id+'"><div class="ph"><img src="'+p.img+'" alt=""><span class="off">−'+pct(p)+'%</span></div><span class="c-price">'+money(p.price)+'<s>'+money(p.old)+'</s></span><span class="c-meta">'+t('watchers',{n:p.watchers})+'</span></button>'; }).join('')+
+      '</div><div class="sec-h">'+t('forYou')+'</div><div class="grid">'+PRODUCTS.map(cardHTML).join('')+'</div>';
+    return h;
+  }
+  function stars(n){ return '<span class="st">'+'★★★★★'.slice(0, Math.round(n))+'</span>'; }
+  function product(){
+    var p=prod(S.pid), size=S.sizes[p.id];
+    var h=top(true)+'<div class="p-hero" data-dead="image" data-k="image"><img src="'+p.img+'" alt="'+pname(p)+'">'+heart(p)+'<div class="dots"><i></i><i></i><i></i><i></i></div></div><div class="p-body">'+
+      '<div class="chips"><span class="pill2 violet">'+t('cond')+'</span>'+(p.ship ? '<span class="pill2 mint">'+t('freeShip')+'</span>' : '')+'<span class="pill2">'+t('watchers',{n:p.watchers})+'</span></div>'+
+      '<h2>'+pname(p)+'</h2>'+
+      '<div class="seller"><span class="av">'+p.seller.charAt(0).toUpperCase()+'</span><div><b>'+p.seller+'</b> ('+p.sales+')<small>'+t('seller',{p:p.pos})+' · ★ '+p.rating+' · '+t('reviews',{n:p.reviews})+'</small></div></div>'+
+      '<div class="pricebox">'+(p.bid ? '<div class="bidline">'+t('curBid')+': '+money(p.bid)+' · '+t('bids',{n:p.bids,t:p.left[LANG]})+'</div>' : '')+
+      '<div class="price-row">'+(p.bid ? '<span style="font-size:13px;font-weight:700">'+t('buyNow')+':</span>' : '')+
+      '<button class="p-price" type="button" data-act="price" aria-expanded="'+S.histOpen+'">'+money(p.price)+'</button>'+
+      (p.old ? '<span class="p-price-old">'+money(p.old)+'</span><span class="off" style="position:static">−'+pct(p)+'%</span>' : '')+'</div>'+
+      (S.shield[p.id] ? '<span class="badge">'+t('shielded')+'</span>' : '<span class="p-hint" data-act="price">'+t('priceHist')+'</span>');
+    if (S.histOpen){ var mn=Math.min.apply(null,p.pts), mx=Math.max.apply(null,p.pts); h+='<div class="hist"><span>'+t('last30',{r:money(mn)+' – '+money(mx)})+'</span>'+spark(p.pts)+'</div>'; }
+    h+='</div>';
+    if (p.sizes){
+      h+='<div class="sizes-head"><span>'+t('size')+(size ? ': '+size : '')+'</span><button class="link" type="button" data-act="chart">'+(S.chartOpen ? t('closeChart') : t('sizeChart'))+'</button></div><div class="sizes">'+
+        p.sizes.map(function(s){ return '<button class="chip'+(s===size?' on':'')+'" type="button" data-act="size" data-v="'+s+'">'+s+'</button>'; }).join('')+'</div>';
+      if (S.chartOpen){
+        var u=p.unit[LANG];
+        h+='<table class="sz"><thead><tr>'+p.chartHead[LANG].map(function(x){return '<th>'+x+'</th>';}).join('')+'</tr></thead><tbody>'+
+          p.chart.map(function(r){ return '<tr>'+r.map(function(x,i){ var v = LANG==='en' ? x.replace(',', '.') : x; return '<td>'+(i ? v+' '+u : v)+'</td>'; }).join('')+'</tr>'; }).join('')+'</tbody></table>';
+      }
+    }
+    h+='<button class="row" type="button" data-act="deliv" aria-expanded="'+S.delivOpen+'"><span class="ri" style="background:#e8f1ff;color:#1f6fe0">'+SVG.truck+'</span><span class="l">'+t('delivery')+'</span><b>'+delivText()+'</b><span class="chev">'+(S.delivOpen?'–':'+')+'</span></button>';
+    if (S.delivOpen) h+='<div class="note">'+t('delivNote')+'</div>';
+    h+='<div class="row"><span class="ri" style="background:#e2f8f2;color:#0b7a5f">'+SVG.ret+'</span><span class="l">'+t('returns')+'</span><b>'+t('returnsV')+'</b></div>';
+    h+='<button class="row" type="button" data-act="reviews" aria-expanded="'+S.reviewsOpen+'"><span class="ri" style="background:#fff4e0;color:#c27c00">'+SVG.star+'</span><span class="l">'+t('reviews',{n:p.reviews})+'</span><b>★ '+p.rating+'</b><span class="chev">'+(S.reviewsOpen?'–':'+')+'</span></button>';
+    if (S.reviewsOpen) h+=p.revs[LANG].map(function(r,i){ return '<div class="rev"><b>'+r[0]+' '+stars(i ? 3 : 5)+'</b>'+r[1]+'</div>'; }).join('');
+    h+='</div><div class="p-cta"><button class="btn-second" type="button" data-act="add" data-k="add">'+t('addCart')+'</button><button class="btn-primary" type="button" data-act="buynow" data-k="buynow">'+t('buyNow')+'</button></div>';
+    return h;
+  }
+  function spark(pts){
+    var mn=Math.min.apply(null,pts), mx=Math.max.apply(null,pts), w=120, h=30;
+    var p=pts.map(function(v,i){ return (i*(w-6)/(pts.length-1)+3).toFixed(1)+','+(h-4-(v-mn)/((mx-mn)||1)*(h-8)).toFixed(1); }).join(' ');
+    var last=p.split(' ').pop().split(',');
+    return '<svg viewBox="0 0 120 30" aria-hidden="true"><polyline points="'+p+'" fill="none" stroke="#4b3df5" stroke-width="2"/><circle cx="'+last[0]+'" cy="'+last[1]+'" r="3" fill="#ff5f6d"/></svg>';
+  }
+  function cart(){
+    var h=top(true)+'<div class="pad"><div class="h1">'+t('cartH')+'</div>';
+    if (!S.cart.length) return h+'<div class="empty">'+t('cartEmpty')+'<br><br><button class="link" type="button" data-act="home">'+t('backShop')+'</button></div></div>';
+    S.cart.forEach(function(it, i){
+      var p=prod(it.id);
+      h+='<div class="line"><img src="'+p.img+'" alt=""><div>'+pname(p)+'<br><small>'+(it.size ? t('sizeLbl',{s:it.size})+' · ' : '')+money(p.price)+(S.shield[p.id] ? ' · '+t('shieldedShort') : '')+'</small></div>'+
+        '<button class="x" type="button" data-act="remove" data-i="'+i+'" aria-label="'+t('remove')+'">×</button></div>';
+    });
+    return h+'<div class="total"><span>'+t('total')+'</span><span>'+money(cartValue())+'</span></div>'+
+      '<button class="btn-primary" type="button" data-act="checkout" data-k="checkout">'+t('toCheckout')+'</button></div>';
+  }
+  function checkout(){
+    var h=top(true)+'<div class="pad"><div class="h1">'+t('checkoutH')+'</div>';
+    S.cart.forEach(function(it){ var p=prod(it.id); h+='<div class="line"><img src="'+p.img+'" alt=""><div>'+pname(p)+'<br><small>'+money(p.price)+'</small></div></div>'; });
+    h+='<div class="kv"><span>'+t('address')+'</span><b>'+t('addressV')+'</b></div>'+
+      '<div class="kv"><span>'+t('card')+'</span><b>Visa •••• 4417</b></div>'+
+      '<button class="row" type="button" data-act="deliv" style="margin:10px 0"><span class="ri" style="background:#e8f1ff;color:#1f6fe0">'+SVG.truck+'</span><span class="l">'+t('delivery')+'</span><b>'+delivText()+'</b><span class="chev">'+(S.delivOpen?'–':'+')+'</span></button>'+
+      (S.delivOpen ? '<div class="note">'+t('courierNote')+'</div>' : '')+
+      '<div class="total"><span>'+t('total')+'</span><span>'+money(cartValue())+'</span></div>';
+    if (S.payState==='error') h+='<div class="err" role="alert">'+t('payErr')+'</div><div style="height:10px"></div>';
+    h+='<button class="btn-primary" type="button" data-act="pay" data-k="pay"'+(S.payState==='pending' ? ' aria-busy="true"' : '')+'>'+(S.payState==='pending' ? t('paying') : t('pay',{v:money(cartValue())}))+'</button></div>';
+    return h;
+  }
+  function done(){
+    return top(false)+'<div class="done"><div class="ok">✓</div><div class="h1" style="margin-top:8px">'+t('doneH')+'</div>'+
+      '<div style="color:var(--shop-muted);font-size:14px">'+t('doneDeliv',{d:delivText()})+'</div>'+
+      '<button class="btn-primary" type="button" data-act="home" style="margin-top:20px">'+t('home')+'</button></div>';
+  }
+  function stTop(back){
+    return '<div class="shop-top"><div class="shop-row">'+(back ? '<button class="icon-btn" type="button" data-act="back" aria-label="'+t('back')+'">‹</button>' : '')+
+      '<span class="logo"><span class="tag" style="background:conic-gradient(from 200deg,#1fc8a0,#2f8cff,#7b5cff,#1fc8a0)"></span><span>fuel<i style="background:linear-gradient(90deg,#1fc8a0,#2f8cff);-webkit-background-clip:text;background-clip:text">go</i></span></span></div></div>';
+  }
+  function stHome(){
+    var fuels=t('fuels');
+    return stTop(false)+'<div class="st-hero" data-dead="image" data-k="image"><img src="img/station.jpg" alt=""><div class="ov"><b>'+t('stName')+'</b><span>'+t('stMeta')+'</span></div></div>'+
+      '<div class="fuels">'+fuels.map(function(f){ return '<span class="pill2">'+f+'</span>'; }).join('')+'</div><div class="fnote">'+t('fuelNote')+'</div>'+
+      '<div class="svc">'+
+      '<button type="button" data-act="svc" data-to="st_wash" style="background:linear-gradient(135deg,#2f8cff,#7b5cff)">'+SVG.drop+'<b>'+t('svcWash')+'</b><span>'+t('svcWashS')+'</span></button>'+
+      '<button type="button" data-act="svc" data-to="st_ev" style="background:linear-gradient(135deg,#1fc8a0,#2f8cff)">'+SVG.bolt+'<b>'+t('svcEV')+'</b><span>'+t('svcEVS')+'</span></button>'+
+      '<button type="button" data-act="svc" data-to="st_pump" style="background:linear-gradient(135deg,#ff5f6d,#ffb02e)">'+SVG.card+'<b>'+t('svcPump')+'</b><span>'+t('svcPumpS')+'</span></button>'+
+      '<button type="button" data-act="svc" data-to="st_market" style="background:linear-gradient(135deg,#7b5cff,#ff5f6d)">'+SVG.cup+'<b>'+t('svcMarket')+'</b><span>'+t('svcMarketS')+'</span></button>'+
+      '</div>';
+  }
+  function stWash(){
+    var st=S.st, pk=prod(st.pkg);
+    var h=stTop(true)+'<div class="p-hero" style="aspect-ratio:16/10" data-dead="image" data-k="image"><img src="img/wash.jpg" alt=""></div><div class="p-body">'+
+      '<h2>'+t('svcWash')+'</h2><div class="sizes">'+['w1','w2'].map(function(id){ var w=prod(id); return '<button class="chip'+(st.pkg===id?' on':'')+'" type="button" data-act="pkg" data-v="'+id+'">'+pname(w)+' · '+money(w.price)+'</button>'; }).join('')+'</div>'+
+      '<button class="row" type="button" data-act="queue" aria-expanded="'+st.queueOpen+'"><span class="ri" style="background:#fff4e0;color:#c27c00">'+SVG.clock+'</span><span class="l">'+t('queue')+'</span><b>'+(st.slotOK ? t('slotOK',{d:st.slot}) : t('queueV'))+'</b><span class="chev">'+(st.queueOpen?'–':'+')+'</span></button>'+
+      (st.queueOpen ? '<div class="note">'+t('queueNote')+'</div>' : '')+
+      '<div class="sizes-head"><span>'+t('slot')+'</span></div><div class="slots">'+['14:00','14:20','14:40'].map(function(sl){ return '<button class="chip'+(st.slot===sl?' on':'')+'" type="button" data-act="slot" data-v="'+sl+'">'+sl+'</button>'; }).join('')+'</div>'+
+      '</div><div class="p-cta" style="grid-template-columns:1fr"><button class="btn-primary" type="button" data-act="book" data-k="book">'+t('book',{v:money(pk.price)})+'</button></div>';
+    return h;
+  }
+  function stPump(){
+    var st=S.st, fuels=t('fuels');
+    var h=stTop(true)+'<div class="pad"><div class="h1">'+t('svcPump')+'</div>'+
+      '<div class="sizes-head"><span>'+t('pump')+'</span></div><div class="slots">'+[1,2,3,4,5,6,7,8].map(function(n){ return '<button class="chip'+(st.pump===n?' on':'')+'" type="button" data-act="pumpSel" data-v="'+n+'">'+n+'</button>'; }).join('')+'</div>'+
+      '<div class="sizes-head" style="margin-top:14px"><span>'+t('fuel')+'</span></div><div class="slots">'+fuels.slice(0,3).map(function(f,i){ return '<button class="chip'+(st.fuel===i?' on':'')+'" type="button" data-act="fuelSel" data-v="'+i+'">'+f+'</button>'; }).join('')+'</div>'+
+      '<div class="sizes-head" style="margin-top:14px"><span>'+t('amount')+'</span></div><div class="slots">'+[20,40,60].map(function(a){ return '<button class="chip'+(st.amt===a?' on':'')+'" type="button" data-act="amt" data-v="'+a+'">'+money(a)+'</button>'; }).join('')+'</div>'+
+      '<div class="kv" style="margin-top:12px"><span>'+t('card')+'</span><b>Visa •••• 4417</b></div>'+
+      '<div class="total"><span>'+t('total')+'</span><span>'+money(st.amt)+'</span></div>';
+    if (S.payState==='error') h+='<div class="err" role="alert">'+t('payErr')+'</div><div style="height:10px"></div>';
+    h+='<button class="btn-primary" type="button" data-act="pay" data-k="pay"'+(S.payState==='pending' ? ' aria-busy="true"' : '')+'>'+(S.payState==='pending' ? t('paying') : t('pay',{v:money(st.amt)}))+'</button></div>';
+    return h;
+  }
+  function stEV(){
+    var st=S.st;
+    return stTop(true)+'<div class="p-hero" style="aspect-ratio:16/10" data-dead="image" data-k="image"><img src="img/ev.jpg" alt=""></div><div class="p-body">'+
+      '<h2>'+t('svcEV')+'</h2>'+
+      '<div class="evrow"><div><b>'+t('evC1')+'</b><br><small>'+t('evPower')+'</small></div><span class="pill2">'+t('evBusy')+'</span></div>'+
+      '<div class="evrow" style="flex-direction:column;align-items:stretch;gap:8px"><div style="display:flex;justify-content:space-between"><b>'+t('evC2')+'</b><span class="pill2 '+(st.evDown?'':'mint')+'"'+(st.evDown?' style="background:#ffeef0;color:#b4192b"':'')+'>'+(st.evDown ? t('evDown') : t('evOk'))+'</span></div>'+
+      '<div class="evbar'+(st.evDown?' down':'')+'"><i style="width:'+st.evPct+'%"></i></div><small style="color:var(--shop-muted)">'+st.evPct+'% · '+t('evPower')+'</small></div>'+
+      '</div>';
+  }
+  function stMarket(){
+    var h=stTop(true)+'<div class="pad"><div class="h1">'+t('svcMarket')+'</div>';
+    ['m3','m1','m2'].forEach(function(id){
+      var it=prod(id);
+      h+='<div class="mk"><img src="'+it.img+'" alt=""><div>'+pname(it)+(S.shield[id] ? '<br><span class="badge">'+t('shielded')+'</span>' : '')+'</div>'+
+        '<button class="pr" type="button" data-act="stPrice" data-pid="'+id+'">'+money(it.price)+(it.old ? '<s>'+money(it.old)+'</s>' : '')+'</button></div>';
+    });
+    if (S.histOpen && S.pid){ var hp=prod(S.pid), mn=Math.min.apply(null,hp.pts), mx=Math.max.apply(null,hp.pts); h+='<div class="hist" style="background:var(--shop-soft);margin-top:10px"><span>'+t('last30',{r:money(mn)+' – '+money(mx)})+'</span>'+spark(hp.pts)+'</div>'; }
+    h+='<div style="height:14px"></div><button class="btn-primary" type="button" data-act="preorder" data-k="preorder">'+t('preorder')+'</button></div>';
+    return h;
+  }
+  function stDone(){
+    return stTop(false)+'<div class="done"><div class="ok">✓</div><div class="h1" style="margin-top:8px">'+t('doneH')+'</div>'+
+      '<div style="color:var(--shop-muted);font-size:14px">'+t('stDoneSub')+'</div>'+
+      '<button class="btn-primary" type="button" data-act="home" style="margin-top:20px">'+t('stBack')+'</button></div>';
+  }
+  function renderTabs(){
+    if (APP==='station'){
+      var showS = S.screen==='st_home' || S.screen==='st_done';
+      app.classList.toggle('tabs', showS);
+      if (!showS){ tabbar.innerHTML=''; return; }
+      var LS=t('tabsSt');
+      tabbar.innerHTML='<nav class="tabbar"><button type="button" data-act="home" class="on">'+SVG.home+LS[0]+'</button>'+
+        '<button type="button" data-dead="tab-search" data-k="tab-map">'+SVG.search+LS[1]+'</button>'+
+        '<button type="button" data-dead="tab-search" data-k="tab-orders">'+SVG.cart+LS[2]+'</button>'+
+        '<button type="button" data-dead="tab-account" data-k="tab-account">'+SVG.user+LS[3]+'</button></nav>';
+      return;
+    }
+    var show = S.screen==='home' || S.screen==='cart' || S.screen==='done';
+    app.classList.toggle('tabs', show);
+    if (!show){ tabbar.innerHTML=''; return; }
+    var L=t('tabs');
+    tabbar.innerHTML='<nav class="tabbar">'+
+      '<button type="button" data-act="home" class="'+(S.screen==='home'||S.screen==='done'?'on':'')+'">'+SVG.home+L[0]+'</button>'+
+      '<button type="button" data-dead="tab-search" data-k="tab-search">'+SVG.search+L[1]+'</button>'+
+      '<button type="button" data-act="cart" class="'+(S.screen==='cart'?'on':'')+'" style="position:relative">'+SVG.cart+L[2]+(S.cart.length ? '<b>'+S.cart.length+'</b>' : '')+'</button>'+
+      '<button type="button" data-dead="tab-account" data-k="tab-account">'+SVG.user+L[3]+'</button></nav>';
+  }
+  function render(){
+    var SCR={home:home, product:product, cart:cart, checkout:checkout, done:done, st_home:stHome, st_wash:stWash, st_pump:stPump, st_ev:stEV, st_market:stMarket, st_done:stDone};
+    var html = (SCR[S.screen]||home)();
+    if (S.toast) html+='<div class="toast" role="status">'+t(S.toast)+'</div>';
+    var y=app.scrollTop;
+    app.innerHTML=html;
+    app.scrollTop=y;
+    renderTabs();
+  }
+  function toast(key){ S.toast=key; render(); setTimeout(function(){ if (S.toast===key){ S.toast=null; render(); } }, 1600); }
+
+  function go(screen, pid){
+    var now=performance.now();
+    if (S.reviewsOpen){ S.reviewsOpen=false; var ms=now-S.reviewsAt; track('reviews_read', Math.round(ms/1000)+' s', {ms:ms}); }
+    if (S.screen==='product' && screen==='home' && now-S.enteredAt<6000 && !S.addedHere && APP==='shop'){ var bp=prod(S.pid); track('back_nav', function(){ return pname(bp); }); }
+    var prevP=PAGE[S.screen]; if (prevP && prevP.t!=='home') S.dur[prevP.t]+=(now-S.enteredAt)/1000;
+    S.visits.push(screen);
+    S.screen=screen; if (pid) S.pid=pid;
+    S.histOpen=false; S.chartOpen=false; S.delivOpen=false; S.addedHere=false; S.enteredAt=now;
+    if (screen!=='checkout' && screen!=='st_pump') S.payState='idle';
+    app.scrollTop=0;
+    render();
+    if (screen==='product'){ var vp=prod(S.pid); track('view_product', function(){ return pname(vp); }); }
+    else if (screen==='cart'){ var n=S.cart.length; track('view_cart', function(){ return t('items',{n:n}); }); }
+    else if (screen==='checkout'){ var v=cartValue(); track('view_checkout', function(){ return money(v); }); }
+    else if (screen==='home' || screen==='st_home') track('view_home');
+    else if (screen==='st_pump'){ track('view_checkout', function(){ return t('svcPump'); }); }
+    else if (screen==='st_wash' || screen==='st_ev' || screen==='st_market'){ var key={st_wash:'svcWash', st_ev:'svcEV', st_market:'svcMarket'}[screen]; track('view_product', function(){ return t(key); }); }
+  }
+  function finishOrder(){
+    var v=cartValue();
+    S.screen = APP==='station' ? 'st_done' : 'done'; S.cart=[]; S.payState='idle'; S.visits.push(S.screen);
+    setTrust(0.05 - 0.12*Math.max(0, S.peak-0.6), 'purchase');
+    render();
+    track('purchase', function(){ return money(v); });
+  }
+  function addToCart(p){ S.cart.push({id:p.id, size:S.sizes[p.id]||null}); S.addedHere=true; track('cart_add', function(){ return pname(p); }); }
+
+  function handle(act, el){
+    var now=performance.now(), p=prod(S.pid);
+    switch(act){
+      case 'open': go('product', el.getAttribute('data-pid')); break;
+      case 'back': go(APP==='station' ? 'st_home' : (S.screen==='checkout' ? 'cart' : 'home')); break;
+      case 'cart': go('cart'); break;
+      case 'home': go(APP==='station' ? 'st_home' : 'home'); break;
+      case 'svc': go(el.getAttribute('data-to')); break;
+      case 'pkg': S.st.pkg=el.getAttribute('data-v'); render(); break;
+      case 'queue': S.st.queueOpen=!S.st.queueOpen; render(); var qo=S.st.queueOpen; track('queue_check', function(){ return t(qo ? 'opened' : 'closed'); }); break;
+      case 'slot': S.st.slot=el.getAttribute('data-v'); render(); break;
+      case 'book': finishOrder(); break;
+      case 'pumpSel': S.st.pump=+el.getAttribute('data-v'); render(); break;
+      case 'fuelSel': S.st.fuel=+el.getAttribute('data-v'); render(); break;
+      case 'amt': S.st.amt=+el.getAttribute('data-v'); render(); break;
+      case 'stPrice': S.pid=el.getAttribute('data-pid'); S.histOpen=true; render(); var sp=prod(S.pid); track('price_tap', function(){ return pname(sp)+' · '+money(sp.price); }); break;
+      case 'preorder': finishOrder(); break;
+      case 'watch':
+        var wp=prod(el.getAttribute('data-pid'));
+        S.watch[wp.id]=!S.watch[wp.id]; render();
+        if (S.watch[wp.id]) track('watch_add', function(){ return pname(wp); });
+        break;
+      case 'price': S.histOpen=!S.histOpen; render(); var pp=p.price; track('price_tap', function(){ return money(pp); }); break;
+      case 'deliv': S.delivOpen=!S.delivOpen; render(); var o=S.delivOpen; track('delivery_check', function(){ return t(o ? 'opened' : 'closed'); }); break;
+      case 'reviews':
+        if (!S.reviewsOpen){ S.reviewsOpen=true; S.reviewsAt=now; render(); }
+        else { S.reviewsOpen=false; render(); var ms=now-S.reviewsAt; track('reviews_read', Math.round(ms/1000)+' s', {ms:ms}); }
+        break;
+      case 'chart': S.chartOpen=!S.chartOpen; render(); if (S.chartOpen) track('size_chart', function(){ return pname(p); }); break;
+      case 'size':
+        var v=el.getAttribute('data-v'), prev=S.sizes[p.id];
+        if (prev===v) break;
+        S.sizes[p.id]=v; render();
+        track(prev ? 'size_switch' : 'size_select', (prev ? prev+' → ' : '')+v);
+        break;
+      case 'add': addToCart(p); toast('added'); break;
+      case 'buynow': addToCart(p); go('checkout'); break;
+      case 'remove':
+        var i=+el.getAttribute('data-i'), it=S.cart[i];
+        if (!it) break;
+        S.cart.splice(i,1); render();
+        var rp=prod(it.id); track('cart_remove', function(){ return pname(rp); });
+        break;
+      case 'checkout': go('checkout'); break;
+      case 'pay':
+        if (S.payState==='pending') break;
+        S.payState='pending'; render();
+        setTimeout(function(){
+          if ((S.screen!=='checkout' && S.screen!=='st_pump') || S.payState!=='pending') return;
+          S.payTries++;
+          if (S.payTries<3 && !S.payFixed){ S.payState='error'; render(); var n=S.payTries; track('form_error', function(){ return t('attempt',{n:n}); }); }
+          else finishOrder();
+        }, 1300);
+        break;
+      case 'accept':
+        var c=S.current; if (!c) break;
+        S.stats.accepted++; S.stats.saved+=c.offer.value||0; S.stats.cost+=c.offer.cost||0; S.stats.net+=c.offer.gain||0;
+        S.resolved[c.c.k]=now;
+        setTrust(c.c.k==='silent' ? 0.12 : 0.04, 'offer_accept');
+        closeSheet();
+        c.offer.onAccept();
+        S.decision.outcome='oAcc';
+        if (S.screen!=='done') render();
+        track('offer_accept', function(){ return t('offer.'+c.offer.variant+'.k'); });
+        break;
+      case 'decline':
+        var d=S.current; if (!d) break;
+        S.stats.declined++;
+        S.cooldown[d.c.k]=now+90000;
+        S.bump[d.c.k]=(S.bump[d.c.k]||0)+0.1;
+        S.decision.outcome='oDec';
+        closeSheet();
+        track('offer_decline', function(){ return t('offer.'+d.offer.variant+'.k'); });
+        break;
+    }
+  }
+
+  var DEAD_LABEL={search:'deadSearch', image:'deadImg', 'tab-account':'deadTab', 'tab-search':'deadSearch', category:'cats'};
+  phone.addEventListener('click', function(e){
+    var tm=performance.now();
+    var kEl=e.target.closest('[data-k]');
+    if (kEl){
+      var key=kEl.getAttribute('data-k');
+      var arr=(S.clicks[key]||[]).filter(function(x){ return tm-x<2000; });
+      arr.push(tm); S.clicks[key]=arr;
+      if (arr.length>=3 && !(S.rageUntil[key]>tm)){ S.rageUntil[key]=tm+2000; S.clicks[key]=[]; track('rage_click', key); }
+    }
+    var dead=e.target.closest('[data-dead]');
+    if (dead){
+      var dk=dead.getAttribute('data-dead');
+      track('dead_click', function(){ var lbl=t(DEAD_LABEL[dk]||dk); return Array.isArray(lbl) ? dead.textContent.trim() : lbl; });
+    }
+    var a=e.target.closest('[data-act]');
+    if (a){ e.preventDefault(); handle(a.getAttribute('data-act'), a); }
+  });
+
+  /* ================= brain panel ================= */
+  function renderBrain(){
+    var L=S.last; if (!L) return;
+    $('risk-v').textContent=fmt(L.risk);
+    var rf=$('risk-f'); rf.style.width=(L.risk*100).toFixed(1)+'%';
+    rf.style.background = L.risk>=0.6 ? 'var(--c-coral)' : L.risk>=0.35 ? 'var(--c-sun)' : 'var(--c-mint)';
+    $('intent-v').textContent=fmt(L.intent);
+    $('intent-d').style.left='calc('+(L.intent*100).toFixed(1)+'% - 2px)';
+    $('causes').innerHTML=L.sc.filter(function(c){ return !(APP==='station' && c.k==='fit'); }).map(function(c){
+      var th=thr(c.k);
+      return '<div class="cause'+(c.s>=th?' hot':'')+'" style="--cc:'+COL[c.k]+'"><span class="nm">'+causeName(c.k)+'</span><div class="track"><div class="fill" style="width:'+(c.s*100).toFixed(1)+'%"></div><div class="thr" style="left:'+(Math.min(th,0.99)*100).toFixed(0)+'%"></div></div><b>'+fmt(c.s)+'</b></div>';
+    }).join('');
+    var D=S.decision, el=$('decision');
+    var mech = D.cause ? '<span class="mech" style="--cc:'+COL[D.cause.k]+'">'+t('mechL',{m:t('mech.'+D.cause.k)})+'</span>' : '';
+    var whyLine = D.reasons ? '<div class="d-why">'+t('why',{r:D.reasons()})+'</div>' : '';
+    if (D.state==='act'){
+      var why = D.cause.k==='friction' ? t('whyFriction') : D.cause.k==='silent' ? t('whySilent') : t('whyZone');
+      el.innerHTML='<span class="pill act">'+t('pillAct')+'</span>'+
+        '<div class="d-main"><span style="color:'+COL[D.cause.k]+'">'+causeName(D.cause.k)+'</span> → '+t('offer.'+D.offer.variant+'.k')+'</div>'+
+        whyLine+mech+'<div class="d-sub" style="color:#bff0dc;font-family:var(--f-mono)">'+econLine(D.offer)+'</div>'+
+        '<div class="d-sub">'+t('actSub',{s:fmt(D.cause.s), i:fmt(D.intent)})+' '+why+(D.outcome ? t('outcome',{o:t(D.outcome)}) : '')+
+        (D.outcome==='oDec' ? ' '+t('bumpNote',{v:fmt(thr(D.cause.k))}) : '')+'</div>'+
+        '<div class="d-lat">'+t('lat',{ms:D.lat!=null ? D.lat.toFixed(0) : '…'})+'</div>';
+    } else if (D.state==='skip'){
+      el.innerHTML='<span class="pill skip">'+t('pillSkip')+'</span>'+
+        (D.why==='fatigue'
+          ? '<div class="d-main">'+t('skipFatigueMain')+'</div>'+whyLine+'<div class="d-sub">'+t('skipFatigueSub',{n:D.n})+'</div>'
+          : '<div class="d-main">'+t('skipMain',{c:causeName(D.cause.k)})+'</div>'+whyLine+'<div class="d-sub">'+t('skipSub',{i:fmt(D.intent)})+'</div>');
+    } else {
+      el.innerHTML='<span class="pill watch">'+t('pillWatch')+'</span><div class="d-main">'+t('watchMain')+'</div><div class="d-sub">'+t('watchSub')+'</div>';
+    }
+    /* müştəri yaddaşı */
+    $('trust-v').textContent=fmt(S.trust);
+    var tf=$('trust-f'); tf.style.width=(S.trust*100).toFixed(1)+'%';
+    tf.style.background = S.trust>=0.7 ? 'var(--c-mint)' : S.trust>=0.5 ? 'var(--c-sun)' : 'var(--c-coral)';
+    var TL=S.trustLast;
+    $('trust-last').textContent = TL ? (TL.d>0 ? '+' : '−')+Math.abs(TL.d).toFixed(2)+' · '+t('ev.'+TL.type) : t('profNote.'+S.profile);
+    $('prof-note').textContent=t('profNote.'+S.profile);
+    $('peak-v').textContent=fmt(S.peak);
+    $('s-shown').textContent=S.stats.shown;
+    $('s-acc').textContent=S.stats.accepted;
+    $('s-dec').textContent=S.stats.declined;
+    $('s-saved').textContent=money(S.stats.saved);
+    $('s-cost').textContent=money(S.stats.cost);
+    var M=ML.m, nn=M.n.toLocaleString('en-US').replace(',', ' ');
+    $('ml-card').innerHTML=[t('mlData',{n:nn}), t('mlTest',{t:M.test.toLocaleString('en-US').replace(',', ' '), a:'<b>'+M.auc.toFixed(3)+'</b>', g:M.gbm.toFixed(3)}),
+      t('mlLift',{p:'<b>'+M.top10+'%</b>', b:M.base}), t('mlCal',{x:M.brier.toFixed(3), y:M.brierBase.toFixed(3)}),
+      t('mlNow',{p:'<b>'+fmt(L.ml)+'</b>', d:(L.adj>=0?'+':'−')+Math.abs(L.adj).toFixed(2), i:'<b>'+fmt(L.intent)+'</b>'}), t('mlFeat')].map(function(x){ return '<li>'+x+'</li>'; }).join('')+
+      '<li class="full">'+t('mlSplit')+'</li>';
+    $('kept-n').textContent=S.events.length;
+    $('ev-n').textContent=t('events',{n:S.events.length});
+    renderPitch();
+  }
+  function sgn(v){ if (Math.abs(v)<0.005) return money(0); return (v>0 ? '+' : '−')+money(Math.abs(v)); }
+  function econLine(o){
+    if (!o) return '';
+    return t('econ2',{c:money(o.cost||0), g:sgn(o.gain||0)});
+  }
+  function moneyRows(o){
+    if (!o) return '<tr><td class="empty" colspan="2">'+t('moneyEmpty')+'</td></tr>';
+    var base = o.value ? o.value : ASSUME.ltv, inc = ASSUME.uplift*base*ASSUME.margin;
+    return '<tr><td>'+t('mAction')+'</td><td>'+t('offer.'+o.variant+'.k')+'</td></tr>'+
+      '<tr><td>'+t('mPayer')+'</td><td style="font-family:var(--f-body)">'+t('payer.'+o.variant)+'</td></tr>'+
+      '<tr><td>'+t('mCost')+'</td><td>'+money(o.cost||0)+'</td></tr>'+
+      '<tr><td>'+(o.value ? t('mInc',{v:money(o.value)}) : t('mIncLtv',{v:money(ASSUME.ltv)}))+'</td><td>'+money(inc)+'</td></tr>'+
+      '<tr class="net"><td>'+t('mNet')+'</td><td class="'+(Math.abs(o.gain||0)<0.005 ? '' : ((o.gain||0)>0?'pos':'neg'))+'">'+sgn(o.gain||0)+'</td></tr>';
+  }
+  var PULSE_AT=0;
+  function renderPitch(){
+    var L=S.last; if (!L) return;
+    var D=S.decision, h=$('pp-hero'), html, cc;
+    if (D.state==='act'){
+      cc=COL[D.cause.k];
+      html='<div class="pp-main"><span class="pill act">'+t('pillAct')+'</span>'+
+        '<div class="big"><span style="color:'+cc+'">'+causeName(D.cause.k)+'</span><br>→ '+t('offer.'+D.offer.variant+'.k')+'</div>'+
+        (D.reasons ? '<div class="why">'+t('why',{r:D.reasons()})+'</div>' : '')+
+        '<span class="mech" style="--cc:'+cc+'">'+t('mechL',{m:t('mech.'+D.cause.k)})+'</span>'+
+        '<div class="econ">'+econLine(D.offer)+'</div>'+
+        (D.outcome ? '<div class="ppo">'+t('outcome',{o:t(D.outcome)}).trim()+(D.outcome==='oDec' ? ' '+t('bumpNote',{v:fmt(thr(D.cause.k))}) : '')+'</div>' : '')+
+        '</div><div class="pp-lat"><b>'+(D.lat!=null ? D.lat.toFixed(0) : '…')+'</b><span>ms</span><small>'+t('latLabel')+'</small><small class="nc">'+t('noCoupon')+'</small></div>';
+    } else if (D.state==='skip'){
+      cc='#8f99aa';
+      html='<div class="pp-main"><span class="pill skip">'+t('pillSkip')+'</span><div class="big">'+(D.why==='fatigue' ? t('skipFatigueMain') : t('skipMain',{c:causeName(D.cause.k)}))+'</div>'+
+        (D.reasons ? '<div class="why">'+t('why',{r:D.reasons()})+'</div>' : '')+
+        '<div class="sub">'+(D.why==='fatigue' ? t('skipFatigueSub',{n:D.n}) : t('skipSub',{i:fmt(D.intent)}))+'</div></div>';
+    } else {
+      cc='#1fc8a0';
+      var pc=cnt('price_tap', performance.now()), pb=prof().base.price_tap||0;
+      var normal = pb && pc>0 && pc<=pb+1;
+      html='<div class="pp-main"><span class="pill watch">'+t('pillWatch')+'</span><div class="big">'+(normal ? t('ppNormMain') : t('ppWatch'))+'</div><div class="sub">'+(normal ? t('ppNorm',{n:pc,b:pb}) : t('ppWatchSub'))+'</div></div>';
+    }
+    h.style.setProperty('--cc', cc);
+    if (h._html!==html){ h.innerHTML=html; h._html=html; }
+    if (D.state==='act' && D._pulsed!==true){ D._pulsed=true; h.classList.remove('pulse'); void h.offsetWidth; h.classList.add('pulse'); }
+    $('pp-risk').textContent=fmt(L.risk);
+    var rf=$('pp-risk-f'); rf.style.width=(L.risk*100).toFixed(1)+'%';
+    rf.style.background = L.risk>=0.6 ? 'var(--c-coral)' : L.risk>=0.35 ? 'var(--c-sun)' : 'var(--c-mint)';
+    $('pp-ml').textContent=fmt(L.intent);
+    $('pp-ml-sub').textContent=t('kpiMLSub',{p:fmt(L.ml), d:(L.adj>=0?'+':'−')+Math.abs(L.adj).toFixed(2)});
+    $('ml-badge').textContent=t('mlBadge',{n:ML.m.n.toLocaleString('en-US').replace(',', ' '), a:ML.m.auc.toFixed(3)});
+    var net=$('pp-net'); net.textContent=sgn(S.stats.net); net.style.color = S.stats.net>0.005 ? 'var(--c-mint)' : (S.stats.net<-0.005 ? 'var(--c-coral)' : 'var(--ink)');
+    $('pp-net-sub').textContent=t('kpiNetSub',{n:S.stats.accepted, c:money(S.stats.cost)});
+    $('priv-badge').textContent=t('privBadge',{b:(S.payload ? new Blob([JSON.stringify(S.payload)]).size : 0)});
+    $('pp-note').textContent=t('profNote.'+S.profile);
+    $('pp-causes').innerHTML=L.sc.map(function(c){
+      var th=thr(c.k);
+      return '<div class="cause'+(c.s>=th?' hot':'')+'" style="--cc:'+COL[c.k]+'"><span class="nm">'+causeName(c.k)+'</span><div class="track"><div class="fill" style="width:'+(c.s*100).toFixed(1)+'%"></div><div class="thr" style="left:'+(Math.min(th,0.99)*100).toFixed(0)+'%"></div></div><b>'+fmt(c.s)+'</b></div>';
+    }).join('');
+    var mh=moneyRows(D.state==='act' ? D.offer : null), mt=$('pp-money');
+    if (mt._html!==mh){ mt.innerHTML=mh; mt._html=mh; }
+  }
+  function renderChips(){
+    var items=S.stream.slice(0,5);
+    $('pp-chips').innerHTML=items.map(function(r){
+      var ck=r.type ? CAUSE_OF[r.type] : null;
+      var d=detailText(r.detail);
+      return '<span class="pp-chip'+(r.cls==='dec'?' dec':'')+'"'+(ck ? ' style="--cc:'+COL[ck]+'"' : '')+'>'+r.label()+(d && r===items[0] ? ' · '+d : '')+'</span>';
+    }).join('');
+  }
+  function renderTip(){
+    var n=S.scen||0;
+    $('tip').textContent = n ? t(APP==='station' ? 'scenTipSt' : 'scenTip')[n] : '';
+    for (var j=1;j<=4;j++) $('sc-l'+j).textContent=t(APP==='station' ? 'scSt' : 'scShop')[j-1];
+    var ab=document.querySelectorAll('[data-app]');
+    for (var q=0;q<ab.length;q++) ab[q].setAttribute('aria-pressed', ab[q].getAttribute('data-app')===APP ? 'true' : 'false');
+    var sb=document.querySelectorAll('[data-scen]');
+    for (var i=0;i<sb.length;i++) sb[i].setAttribute('aria-pressed', +sb[i].getAttribute('data-scen')===n ? 'true' : 'false');
+  }
+  function renderStream(isFresh){
+    renderChips();
+    $('stream').innerHTML=S.stream.slice(0,30).map(function(r,i){
+      var d=detailText(r.detail);
+      return '<li class="'+r.cls+(isFresh&&i===0?' fresh':'')+'"><span class="t">'+((r.t-S.t0)/1000).toFixed(1)+'s</span><span>'+r.label()+(d ? ' <span class="d">· '+d+'</span>' : '')+'</span></li>';
+    }).join('');
+  }
+  function applyStatic(){
+    document.documentElement.lang=LANG;
+    var els=document.querySelectorAll('[data-i]');
+    for (var i=0;i<els.length;i++) els[i].textContent=t(els[i].getAttribute('data-i'));
+    $('hints').innerHTML=t('hints').map(function(h){ return '<li>'+h+'</li>'; }).join('');
+    $('half').innerHTML=t('half').map(function(h){ return '<li>'+h+'</li>'; }).join('');
+    var pb=document.querySelectorAll('[data-prof]');
+    for (var q=0;q<pb.length;q++){ var pk=pb[q].getAttribute('data-prof'); pb[q].textContent=t('prof.'+pk); pb[q].setAttribute('aria-pressed', S && S.profile===pk ? 'true' : 'false'); }
+    var b=document.querySelectorAll('[data-lang]');
+    for (var j=0;j<b.length;j++) b[j].setAttribute('aria-pressed', b[j].getAttribute('data-lang')===LANG ? 'true' : 'false');
+  }
+  var MODE='pitch';
+  try { var sm=localStorage.getItem('pof-mode'); if (sm==='detail' || sm==='pitch') MODE=sm; } catch(e){}
+  function setMode(m){
+    MODE=m; document.body.classList.toggle('pitch', m==='pitch');
+    try { localStorage.setItem('pof-mode', m); } catch(e){}
+    var mb=document.querySelectorAll('[data-mode]');
+    for (var i=0;i<mb.length;i++) mb[i].setAttribute('aria-pressed', mb[i].getAttribute('data-mode')===m ? 'true' : 'false');
+  }
+  function scenario(n, profile){
+    start(profile || S.profile);
+    S.scen=n;
+    if (APP==='station'){
+      if (n===1) go('st_wash');
+      else if (n===2){ S.st.pump=4; go('st_pump'); }
+      else if (n===3){ go('st_ev'); var tok=S.t0; setTimeout(function(){ if (S.t0!==tok) return; S.st.evDown=true; render(); track('off_charger', function(){ return t('offEV'); }); }, 1600); }
+      else if (n===4) go('st_market');
+      renderTip();
+      return;
+    }
+    if (n===1) go('product','p1');
+    else if (n===2){ var bp=prod('p5'); S.pid='p5'; S.cart.push({id:'p5', size:null}); track('cart_add', function(){ return pname(bp); }); go('checkout'); }
+    else if (n===3) go('product','p3');
+    else if (n===4){ track('off_delay', function(){ return t('offD'); }); }
+    renderTip();
+  }
+  function setApp(a){
+    if (a===APP) return;
+    APP=a; try { localStorage.setItem('pof-app', a); } catch(e){}
+    start(S.profile);
+  }
+  /* ---------- ROI hesablayıcısı ---------- */
+  var RI=[{k:'N',min:20,max:1000,step:10,v:100,f:'int'},{k:'B',min:5,max:300,step:5,v:60,f:'money'},{k:'m',min:.05,max:.6,step:.01,v:.25,f:'pct'},
+    {k:'c0',min:0,max:.6,step:.01,v:.15,f:'pct'},{k:'u',min:0,max:.3,step:.005,v:.10,f:'pp'},{k:'cp',min:0,max:.3,step:.01,v:.10,f:'pct'},
+    {k:'sh',min:0,max:.1,step:.0025,v:.015,f:'pct1'},{k:'s',min:.1,max:1,step:.05,v:.6,f:'pct'},{k:'fee',min:0,max:.5,step:.05,v:.2,f:'pct'}];
+  var RV={}; RI.forEach(function(r){ RV[r.k]=r.v; });
+  function rfmt(f,v){ if (f==='int') return String(Math.round(v)); if (f==='money') return money(v); if (f==='pp') return (v*100).toFixed(1)+' '+t('ppU'); if (f==='pct1') return (v*100).toFixed(2)+'%'; return Math.round(v*100)+'%'; }
+  function buildRoi(){
+    $('roi-in').innerHTML=RI.map(function(r){ return '<label for="roi-'+r.k+'"><span>'+t('roiIn.'+r.k)+'</span><b id="roi-v-'+r.k+'">'+rfmt(r.f,RV[r.k])+'</b><input type="range" id="roi-'+r.k+'" min="'+r.min+'" max="'+r.max+'" step="'+r.step+'" value="'+RV[r.k]+'"></label>'; }).join('');
+    RI.forEach(function(r){ $('roi-'+r.k).addEventListener('input', function(){ RV[r.k]=+this.value; $('roi-v-'+r.k).textContent=rfmt(r.f,RV[r.k]); calcRoi(); }); });
+    calcRoi();
+  }
+  function calcRoi(){
+    var N=RV.N,B=RV.B,m=RV.m,c0=RV.c0,u=RV.u,cp=RV.cp,sh=RV.sh,s=RV.s,fee=RV.fee;
+    var none={buy:N*c0, inc:0, incM:0, cost:0, fee:0};
+    var cb=N*(c0+u), coup={buy:cb, inc:N*u, incM:N*u*B*m, cost:cp*B*cb, fee:0};
+    var tg=N*s, pf={buy:N*c0+tg*u, inc:tg*u, incM:tg*u*B*m, cost:sh*B*tg*(c0+u)}; pf.fee=fee*pf.incM;
+    [none,coup,pf].forEach(function(x){ x.net=x.incM-x.cost-x.fee; });
+    var cols=[none,coup,pf], R=t('roiRows');
+    function row(lbl,key,fm,cls){ return '<tr'+(cls?' class="'+cls+'"':'')+'><td>'+lbl+'</td>'+cols.map(function(x){ var v=x[key]; var c=cls?(v>0.005?' class="pos"':(v<-0.005?' class="neg"':'')):''; return '<td'+c+'>'+(fm==='n'?v.toFixed(1):money(v))+'</td>'; }).join('')+'</tr>'; }
+    $('roi-t').innerHTML='<thead><tr><th></th><th>'+t('roiCol')[0]+'</th><th>'+t('roiCol')[1]+'</th><th class="pof">'+t('roiCol')[2]+'</th></tr></thead><tbody>'+
+      row(R[0],'buy','n')+row(R[1],'inc','n')+row(R[2],'incM','m')+row(R[3],'cost','m')+row(R[4],'fee','m')+row(R[5],'net','m','net')+'</tbody>';
+    var mx=Math.max(1,Math.abs(coup.net),Math.abs(pf.net));
+    $('roi-bars').innerHTML=[[t('roiCol')[1],coup.net,'var(--c-sun)'],[t('roiCol')[2],pf.net,'var(--c-mint)']].map(function(a){
+      return '<div class="rb"><span>'+a[0]+'</span><div class="bar"><i style="width:'+(Math.abs(a[1])/mx*100).toFixed(1)+'%;background:'+(a[1]<0?'var(--c-coral)':a[2])+'"></i></div><b>'+money(a[1])+'</b></div>'; }).join('');
+    var den=m*(1-fee)-sh;
+    $('roi-ev').innerHTML = t('roiEvidence',{w:'−1 $', m:'+52 $', c:'+87%'});
+    $('roi-be').innerHTML = den>0 ? t('roiBE',{u:'<b>'+(sh*c0/den*100).toFixed(1)+' '+t('ppU')+'</b>'}) : t('roiBEno');
+  }
+  var SRC=[
+    ['srcML','AUC 0.889','data','https://archive.ics.uci.edu/dataset/468/online+shoppers+purchasing+intention+dataset'],
+    ['srcRage','3 / 2 s','std','https://support.contentsquare.com/hc/en-us/articles/37271767248273-Frustration-score'],
+    ['srcNeg','−0.22 / +0.12','lit','https://fbaum.unc.edu/teaching/articles/Baumeister_2001.pdf'],
+    ['srcPeak','≥ 0.6','lit','https://www.jstor.org/stable/40062570'],
+    ['srcUplift','+87%','exp','http://www.minethatdata.com/Kevin_Hillstrom_MineThatData_E-MailAnalytics_DataMiningChallenge_2008.03.20.csv'],
+    ['srcShield','30% × 5%','hyp',null],
+    ['srcThr','0.62','hyp',null],
+    ['srcHalf','1 / 10 dəq','hyp',null],
+    ['srcMargin','25% · 240 ₼','hyp',null],
+    ['srcPage','8 / 25 / 40','hyp',null]
+  ];
+  /* Hillstrom MineThatData eksperimenti: 64 000 müştəri, təsadüfi bölgü (uplift_evidence.py ilə hesablanıb) */
+  var EVID = {n:64000, conv:[86.5,62.0,111.1], spend:[91.4,57.6,125.2], visit:[57.3,52.2,62.5],
+    pol:[['blanket_wrong',-1.0,-51.3,46.5],['blanket_random',6.2,-25.7,75.0],['blanket_best',50.1,-2.3,104.7],['matched',51.8,1.3,105.2]],
+    het:[['womens_only',0.511,0.264,0.759],['mens_only',0.063,-0.152,0.278]], mvw:[52.8,13.2,93.4]};
+  function evBar(lbl, sub, v, lo, hi, mn, mx, unit, hl){
+    var sc=function(x){ return ((x-mn)/(mx-mn)*100).toFixed(2)+'%'; }, z=sc(0);
+    var left=v>=0 ? z : sc(v), w=Math.abs((v)/(mx-mn)*100).toFixed(2)+'%';
+    return '<div class="evb'+(hl?' hl':'')+'" title="95%: '+lo+' … '+hi+'"><span>'+lbl+(sub?'<small>'+sub+'</small>':'')+'</span><div class="ax"><i class="z" style="left:'+z+'"></i><i class="bar" style="left:'+left+';width:'+w+'"></i><i class="ci" style="left:'+sc(lo)+';width:'+((hi-lo)/(mx-mn)*100).toFixed(2)+'%"></i></div><b>'+(v>0?'+':(v<0?'−':''))+Math.abs(v).toFixed(unit==='pp'?2:0)+(unit==='pp'?'':' $')+'</b></div>';
+  }
+  function buildEv(){
+    var P=t('evPol'), H=t('evHet');
+    var bars=EVID.pol.map(function(r){ return evBar(P[r[0]][0], P[r[0]][1], r[1], r[2], r[3], -60, 115, '$', r[0]==='matched'); }).join('');
+    var het=EVID.het.map(function(r){ return evBar(H[r[0]], '', r[1], r[2], r[3], -0.25, 0.85, 'pp', r[0]==='womens_only'); }).join('');
+    $('ev').innerHTML='<h3>'+t('evH')+'</h3><p class="lead">'+t('evLead')+'</p>'+
+      '<div class="ev-grid"><div><div class="ev-sub">'+t('evAxis')+'</div>'+bars+'</div>'+
+      '<div><div class="ev-sub">'+t('evHetH')+'</div>'+het+
+      '<div class="ev-stats"><div><b>+'+EVID.conv[0].toFixed(0)+'%</b><span>'+t('evConv')+'</span></div><div><b>+'+EVID.spend[0].toFixed(0)+'%</b><span>'+t('evSpend')+'</span></div><div><b>+'+EVID.visit[0].toFixed(0)+'%</b><span>'+t('evVisit')+'</span></div></div></div></div>'+
+      '<p class="meth">'+t('evMeth')+' <a href="http://www.minethatdata.com/Kevin_Hillstrom_MineThatData_E-MailAnalytics_DataMiningChallenge_2008.03.20.csv">'+t('srcLink')+'</a></p>';
+  }
+  function buildSrc(){
+    buildEv();
+    var H=t('srcCols');
+    $('src-t').innerHTML='<thead><tr><th>'+H[0]+'</th><th>'+H[1]+'</th><th>'+H[2]+'</th><th>'+H[3]+'</th></tr></thead><tbody>'+
+      SRC.map(function(r){ var x=t(r[0]);
+        var val = r[0]==='srcHalf' ? x[3] : r[1];
+        return '<tr><td>'+x[0]+'</td><td>'+val+'</td><td>'+x[1]+(r[3] ? ' <a href="'+r[3]+'">'+t('srcLink')+'</a>' : '')+'</td><td><span class="st '+r[2]+'">'+t('srcStatus.'+r[2])+'</span><br><small style="color:var(--muted)">'+x[2]+'</small></td></tr>'; }).join('')+'</tbody>';
+    var den=RV.m*(1-RV.fee)-RV.sh, be = den>0 ? RV.sh*RV.c0/den : null;
+    $('src-robust').innerHTML = be ? t('srcRobust',{be:'<b>'+(be*100).toFixed(1)+' '+t('ppU')+'</b>', u:'<b>'+(RV.u*100).toFixed(0)+' '+t('ppU')+'</b>', x:'<b>'+Math.floor(RV.u/be)+'</b>'}) : '';
+  }
+  function openSrc(){ if (!$('roi').hidden) closeRoi(); buildSrc(); $('src').hidden=false; $('src-close').focus(); }
+  function closeSrc(){ $('src').hidden=true; $('src-open').focus(); }
+  $('src-open').addEventListener('click', openSrc);
+  $('src-close').addEventListener('click', closeSrc);
+  $('src').addEventListener('click', function(e){ if (e.target===this) closeSrc(); });
+  function openRoi(){ buildRoi(); $('roi').hidden=false; $('roi-close').focus(); }
+  function closeRoi(){ $('roi').hidden=true; $('roi-open').focus(); }
+  $('roi-open').addEventListener('click', openRoi);
+  $('roi-close').addEventListener('click', closeRoi);
+  $('roi').addEventListener('click', function(e){ if (e.target===this) closeRoi(); });
+  var abs=document.querySelectorAll('[data-app]');
+  for (var ai=0;ai<abs.length;ai++) abs[ai].addEventListener('click', function(){ setApp(this.getAttribute('data-app')); });
+  function setLang(l){
+    if (!I18N[l]) return;
+    LANG=l;
+    try { localStorage.setItem('pof-lang', l); } catch(e){}
+    applyStatic(); render(); renderBrain(); renderStream(false); renderPayload(); renderTip();
+    if (!$('roi').hidden) buildRoi();
+    if (!$('src').hidden) buildSrc();
+    if (S.sheetOpen && S.current){ sheet.innerHTML=sheetHTML(); }
+  }
+  var lb=document.querySelectorAll('[data-lang]');
+  for (var k=0;k<lb.length;k++) lb[k].addEventListener('click', function(){ setLang(this.getAttribute('data-lang')); });
+
+  /* ================= timer: silence + decay ================= */
+  setInterval(function(){
+    var now=performance.now();
+    $('clock').textContent=((now-S.t0)/1000).toFixed(1)+' s';
+    var ss=silSecs(now);
+    if (ss>=12 && !S.silLogged){ S.silLogged=true; var n=Math.round(ss); pushStream(function(){ return t('silence',{n:n}); }, null, now, 'sil'); }
+    evaluate(now, ss>4 ? now : null);
+  }, 1000);
+
+  $('off-delay').addEventListener('click', function(){ track('off_delay', function(){ return t('offD'); }); });
+  $('off-return').addEventListener('click', function(){ track('off_return', function(){ return t('offR'); }); });
+  $('off-comp').addEventListener('click', function(){ track('off_competitor', function(){ return t('offC'); }); });
+  $('reset').addEventListener('click', function(){ if (S.scen) scenario(S.scen); else start(S.profile); });
+  var pbs=document.querySelectorAll('[data-prof]');
+  for (var pi=0;pi<pbs.length;pi++) pbs[pi].addEventListener('click', function(){ var pk=this.getAttribute('data-prof'); if (S.scen) scenario(S.scen, pk); else start(pk); });
+  var sbs=document.querySelectorAll('[data-scen]');
+  for (var si=0;si<sbs.length;si++) sbs[si].addEventListener('click', function(){ scenario(+this.getAttribute('data-scen')); });
+  var mbs=document.querySelectorAll('[data-mode]');
+  for (var mi=0;mi<mbs.length;mi++) mbs[mi].addEventListener('click', function(){ setMode(this.getAttribute('data-mode')); });
+  document.addEventListener('keydown', function(e){
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var tg=e.target && e.target.tagName; if (tg==='INPUT' || tg==='TEXTAREA') return;
+    var k=e.key.toLowerCase();
+    if (k==='escape' && !$('roi').hidden){ closeRoi(); return; }
+    if (k==='escape' && !$('src').hidden){ closeSrc(); return; }
+    if (!$('roi').hidden || !$('src').hidden) return;
+    if (k>='1' && k<='4'){ scenario(+k); e.preventDefault(); }
+    else if (k==='e'){ openRoi(); }
+    else if (k==='m'){ openSrc(); }
+    else if (k==='r'){ if (S.scen) scenario(S.scen); else start(S.profile); }
+    else if (k==='p'){ setMode(MODE==='pitch' ? 'detail' : 'pitch'); }
+    else if (k==='l'){ var order=['az','tr','en']; setLang(order[(order.indexOf(LANG)+1)%3]); }
+  });
+
+  function start(profile){
+    S=fresh(profile);
+    sheet.hidden=true; sheet.classList.remove('open'); sheet.innerHTML='';
+    $('stream').innerHTML='';
+    applyStatic();
+    renderPayload();
+    render();
+    track('view_home');
+    renderTip();
+  }
+  setMode(MODE);
+  start();
+})();
+</script>
+</body>
+</html>
